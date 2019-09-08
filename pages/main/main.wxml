@@ -1,0 +1,38 @@
+<view class="page">
+    <view class="weui-article__p" style="display:flex;justify-content: center;">
+        <image class="weui-article__img" src="../../images/logo1.png" mode="aspectFit" style="height: 200rpx;width: 640rpx;" />
+    </view>
+    <view class="page__bd">
+        <view class="weui-article">
+            <view class="weui-article__h1"><text style="border-bottom:1.5px solid #ee7c1b;color:red;">公司理念</text></view>
+            <view class="weui-article__section">
+                <view class="weui-article__section">
+                    <view class="weui-article__p">
+                        护理工作是爱心与艺术的结合，护理员貌似简单的照料工作，可其中包含着很多人为和技术的因素，这就要求护理人员必须不断充实自我，在护理工作中既能用丰富的医学知识和技能为医患者提供优质的医疗护理服务，又能有良好的礼仪修养为每一个需要健康帮助的人提供全方位的护理服务，以最佳的精神面貌和温文尔雅的形象面对护理工作，做文明礼貌的"健康使者"。
+                    </view>
+                </view>
+            </view>
+            <view class="weui-article__section">
+                <view class="weui-article__section">
+                    <view class="weui-article__p">
+                        <text class="tcolor">「汇骏」</text>注重护理人员的能力，更注重护理人员的品行。希望每名护理人员务必严格遵守公司的各项规章制度，不断的战胜自我，更新观念，改掉一些不良习惯；护理人员应清楚的知道，自己的一言一行都代表了<text class="tcolor">「汇骏」</text>的形象。我们非常注重护理人员的发展，给每一个护理人员都提供了培训和发展机会，为广大护理人员创造了良好的自然环境和人文环境，并通过组织培训等方式，搭建了供广大护理人员学习和成长的平台。希望护理人员通过不断的学习，完善自我，改变自己的职业生涯，实现自己的人生梦想。
+                    </view>
+                </view>
+            </view>
+            <view class="weui-article__section">
+                <view class="weui-article__section">
+                    <view class="weui-article__p">
+                        <text class="tcolor">【I护理。I Care】</text>汇骏专业医护有限公司、深圳市汇骏养护健康服务有限公司以及一群香港医护团队带领，连同台湾护老业代表，参考台湾、日本护老课程结合中港台三地护老院经验而成立的品牌。
+                    </view>
+                </view>
+            </view>
+            <view class="weui-article__section">
+                <view class="weui-article__section">
+                    <view class="weui-article__p">
+                        ＂I护理。爱护您，以爱护您为本、爱护您及您的家人，提供全面护理服务、为您解决繁琐的护理问题＂为<text class="tcolor">「汇骏」</text>宗旨。
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>

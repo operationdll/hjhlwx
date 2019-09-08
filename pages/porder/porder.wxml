@@ -1,0 +1,68 @@
+<import src="../../template/mask.wxml"/>
+<template is="mask" data="{{flag}}"></template>
+
+<view class="page">
+    <block wx:if="{{care==1}}">
+        <view class="page__hd">
+            <view class="page__title">立即下单</view>
+            <text style="color:red;">当天服务</text>
+        </view>
+        <view class="page__bd">
+            <view class="weui-cells__title">服务价格</view>
+            <view class="weui-cells weui-cells_after-title">
+                <radio-group bindchange="radioChange1">
+                    <label class="weui-cell weui-check__label" wx:for="{{radioItems1}}" wx:key="value">
+                        <radio class="weui-check" value="{{item.value}}" checked="{{item.checked}}"/>
+                        <view class="weui-cell__bd">{{item.name}}</view>
+                        <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{item.checked}}">
+                            <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
+                        </view>
+                    </label>
+                </radio-group>
+            </view>
+            <view class="total">总价:{{total1}}元</view>
+            <view class="weui-cells__title">
+                <button class="weui-btn" type="primary" bindtap="submitForm">立即下单</button>
+            </view>
+        </view>
+    </block>
+    <block wx:else>
+        <view class="page__hd">
+            <view class="page__title">预约下单</view>
+            <text style="color:red;">预定时间服务</text>
+        </view>
+        <view class="page__bd">
+            <view class="weui-cells__title">服务价格</view>
+            <view class="weui-cells weui-cells_after-title">
+                <radio-group bindchange="radioChange2">
+                    <label class="weui-cell weui-check__label" wx:for="{{radioItems2}}" wx:key="value">
+                        <radio class="weui-check" value="{{item.value}}" checked="{{item.checked}}"/>
+                        <view class="weui-cell__bd">{{item.name}}</view>
+                        <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{item.checked}}">
+                            <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
+                        </view>
+                    </label>
+                </radio-group>
+            </view>
+            <view class="weui-cell ">
+                <view class="weui-cell__hd">
+                    <view class="weui-label">预定日期</view>
+                </view>
+                <view class="weui-cell__bd">
+                    <picker mode="date" value="{{dateStart}}" start="{{start}}" bindchange="bindDateChange1">
+                        <view class="weui-input">{{dateStart}}</view>
+                    </picker>
+                </view>
+                <text class="dmark">至</text>
+                <view class="weui-cell__bd">
+                    <picker mode="date" value="{{dateEnd}}" start="{{start}}" bindchange="bindDateChange2">
+                        <view class="weui-input">{{dateEnd}}</view>
+                    </picker>
+                </view>
+            </view>
+            <view class="weui-cells__title">
+                <button class="weui-btn" type="primary" bindtap="submitForm1">预约下单</button>
+            </view>
+        </view>
+    </block>
+</view>

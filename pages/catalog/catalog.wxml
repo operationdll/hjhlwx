@@ -1,0 +1,14 @@
+<view class="page">
+    <button class='btn1' bindtap="bindCareTap" data-care="1">
+      <image class='btnImg' src='../../images/care1.png'></image>
+      <view>基础护理</view>
+    </button>
+    <button class='btn1' bindtap="bindCareTap" data-care="2">
+      <image class='btnImg' src='../../images/care2.png'></image>
+      <view>临床护理</view>
+    </button>
+    <button class='btn1' bindtap="bindCareTap" data-care="3">
+      <image class='btnImg' src='../../images/care3.png'></image>
+      <view>特别护理</view>
+    </button>
+</view>

@@ -1,0 +1,5 @@
+.desfont{
+  color: rgba(0,0,0,.5);
+  font-size: 28rpx;
+  padding-top: 4rpx;
+}

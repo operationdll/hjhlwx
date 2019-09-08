@@ -1,0 +1,10 @@
+<view class="page">
+	<button class='btn1' bindtap="bindCareTap" data-care="1" style="margin-top:-80rpx;">
+      <image class='btnImg' src='../../images/order1.png'></image>
+      <view>立即下单</view>
+  </button>
+  <button class='btn1' bindtap="bindCareTap" data-care="2">
+      <image class='btnImg' src='../../images/order2.png'></image>
+      <view>预约下单</view>
+  </button>
+</view>

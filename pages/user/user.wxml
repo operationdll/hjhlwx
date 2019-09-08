@@ -1,0 +1,143 @@
+<import src="../../template/mask.wxml"/>
+<template is="mask" data="{{flag}}"></template>
+
+<view class="page">
+    <view class="page__hd">
+        <view class="page__title">用户信息</view>
+    </view>
+    <view class="page__bd">
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell ">
+                <view class="weui-cell__hd">
+                    <text class="redStart">*</text>
+                    <view class="weui-label">姓:</view>
+                </view>
+                <view class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入" value="{{lastname}}" bindchange="bindLnameChange"/>
+                </view>
+            </view>
+        </view>
+        <view class="weui-cells__title"></view>
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell ">
+                <view class="weui-cell__hd">
+                    <text class="redStart">*</text>
+                    <view class="weui-label">名:</view>
+                </view>
+                <view class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入" value="{{firstname}}" bindchange="bindFnameChange"/>
+                </view>
+            </view>
+        </view>
+        <view class="weui-cells__title"></view>
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell" style="padding: 4px 16px;">
+                <view class="weui-cell__hd">
+                    <text class="redStart">*</text>
+                    <view class="weui-label">性别:</view>
+                </view>
+                <view class="weui-cell__bd">
+                    <picker bindchange="bindSexChange" value="{{sexIndex}}" range="{{sexes}}" range-key="name">
+                        <view class="weui-select">{{sexes[sexIndex].name}}</view>
+                    </picker>
+                </view>
+            </view>
+        </view>
+        <view class="weui-cells__title"></view>
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell">
+                <view class="weui-cell__hd">
+                    <text class="redStart">*</text>
+                    <view class="weui-label">出生日期:</view>
+                </view>
+                <picker mode="date" value="{{birthDate}}" start="1900-01-01" bindchange="bindDateChange">
+                    <view class="weui-input">{{birthDate}}</view>
+                </picker>
+            </view>
+        </view>
+        <view class="weui-cells__title"></view>
+         <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell ">
+                <view class="weui-cell__hd">
+                    <text class="redStart">*</text>
+                    <view class="weui-label">退休前职业:</view>
+                </view>
+                <view class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入" value="{{occupation}}" bindchange="bindOccChange"/>
+                </view>
+            </view>
+        </view>
+        <view class="weui-cells__title"></view>
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell" style="padding: 4px 16px;">
+                <view class="weui-cell__hd">
+                    <text class="redStart">*</text>
+                    <view class="weui-label">目前居住状态:</view>
+                </view>
+                <view class="weui-cell__bd">
+                    <picker bindchange="bindLivingChange" value="{{livingIndex}}" range="{{livings}}">
+                        <view class="weui-select">{{livings[livingIndex]}}</view>
+                    </picker>
+                </view>
+            </view>
+        </view>
+        <view class="weui-cells__title"></view>
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell" style="padding: 4px 16px;">
+                <view class="weui-cell__hd">
+                    <text class="redStart">*</text>
+                    <view class="weui-label">住所类别:</view>
+                </view>
+                <view class="weui-cell__bd">
+                    <picker bindchange="bindFlatChange" value="{{flatIndex}}" range="{{flats}}">
+                        <view class="weui-select">{{flats[flatIndex]}}</view>
+                    </picker>
+                </view>
+            </view>
+        </view>
+        <view class="weui-cells__title"></view>
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell" style="padding: 4px 16px;">
+                <view class="weui-cell__hd">
+                    <text class="redStart">*</text>
+                    <view class="weui-label">疾病:</view>
+                </view>
+                <view class="weui-cell__bd">
+                    <picker bindchange="bindDiseaseChange" value="{{diseaseIndex}}" range="{{diseases}}">
+                        <view class="weui-select">{{diseases[diseaseIndex]}}</view>
+                    </picker>
+                </view>
+            </view>
+        </view>
+        <view class="weui-cells__title"></view>
+        <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell" style="padding: 4px 16px;">
+                <view class="weui-cell__hd">
+                    <view class="weui-label">特别护理:</view>
+                </view>
+                <view class="weui-cell__bd">
+                    <picker bindchange="bindScareChange" value="{{scareIndex}}" range="{{scares}}">
+                        <view class="weui-select">{{scares[scareIndex]}}</view>
+                    </picker>
+                </view>
+            </view>
+        </view>
+        <view class="weui-cells__title"></view>
+        <view class="weui-cells weui-cells_after-title" hidden="{{showIfs}}">
+            <view class="weui-cell" style="padding: 4px 16px;">
+                <view class="weui-cell__hd">
+                    <text class="redStart">*</text>
+                    <view class="weui-label">如有:</view>
+                </view>
+                <view class="weui-cell__bd">
+                    <picker bindchange="bindIfsChange" value="{{ifsIndex}}" range="{{ifs}}">
+                        <view class="weui-select">{{ifs[ifsIndex]}}</view>
+                    </picker>
+                </view>
+            </view>
+        </view>
+        <view class="weui-cells__title">
+            <button class="weui-btn" type="primary" bindtap="submitForm">确定</button>
+        </view>
+    </view>
+</view>

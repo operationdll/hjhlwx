@@ -1,0 +1,17 @@
+<import src="../../template/mask.wxml"/>
+<template is="mask" data="{{flag}}"></template>
+
+<view class="section">
+  <view class="section__title weui-panel__hd">{{title}}</view>
+  <scroll-view scroll-y>
+    <navigator class="weui-media-box weui-media-box_appmsg" url="../product/product?pid={{catalog.title}}" wx:for="{{catalogs}}" wx:for-item="catalog" wx:key="{{catalog.title}}">
+      <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+        <image class="weui-media-box__thumb" src="../../images/sbutton.png" />
+      </view>
+      <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+        <view class="weui-media-box__title">{{catalog.title}}</view>
+        <text class="desfont">{{catalog.content}}</text>
+      </view>
+    </navigator>
+  </scroll-view>
+</view>
