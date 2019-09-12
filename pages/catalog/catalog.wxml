@@ -1,5 +1,5 @@
 <view class="page">
-    <button class='btn1' bindtap="bindCareTap" data-care="1">
+    <button class='btn1' bindtap="bindCareTap" data-care="1" style="margin-top: 0px;">
       <image class='btnImg' src='../../images/care1.png'></image>
       <view>基础护理</view>
     </button>

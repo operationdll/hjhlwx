@@ -1,6 +1,4 @@
-// pages/main/main.js
-//获取应用实例
-const app = getApp()
+// pages/share/share.js
 Page({
 
   /**
@@ -14,6 +12,14 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    wx.showTabBar();
+
+  },
+  /**
+   * 联系客服
+   */
+  bindCallUser: function () {
+    wx.makePhoneCall({
+      phoneNumber: "4008386681"
+    });
   }
 })

@@ -1,14 +1,15 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/logs/logs",
     "pages/main/main",
     "pages/order/order",
     "pages/catalog/catalog",
     "pages/user/user",
     "pages/catalogSecond/catalogSecond",
     "pages/product/product",
-    "pages/porder/porder"
+    "pages/porder/porder",
+    "pages/share/share",
+    "pages/settlement/settlement"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -43,6 +44,12 @@
         "iconPath": "images/iconfont-user.png",
         "selectedIconPath": "images/iconfont-user-active.png",
         "text": "用户"
+      },
+      {
+        "pagePath": "pages/share/share",
+        "iconPath": "images/share.png",
+        "selectedIconPath": "images/share-active.jpeg",
+        "text": "联系我们"
       }
     ]
   },

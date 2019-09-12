@@ -1,10 +1,25 @@
 <view class="page">
-	<button class='btn1' bindtap="bindCareTap" data-care="1" style="margin-top:-80rpx;">
-      <image class='btnImg' src='../../images/order1.png'></image>
-      <view>立即下单</view>
-  </button>
-  <button class='btn1' bindtap="bindCareTap" data-care="2">
-      <image class='btnImg' src='../../images/order2.png'></image>
-      <view>预约下单</view>
-  </button>
+  <view class="weui-article__p" style="display:flex;justify-content: center;">
+      <image class="weui-article__img" src="../../images/logo1.png" mode="aspectFit" style="height: 200rpx;width: 640rpx;" />
+  </view>
+  <view class="page__bd">
+      <view class="weui-article">
+          <view class="weui-article__h1"><text class="htitle">{{title}}</text></view>
+          <view class="weui-article__section">
+              <view class="weui-article__section">
+                  <view class="weui-article__p" style="color:#999;">
+                      {{content}}
+                  </view>
+              </view>
+          </view>
+      </view>
+  </view>
+  <view class="bntView">
+    <button class="btn1" type="primary" bindtap="bindCareTap" data-care="1" style="margin-left:60rpx;">
+        立即下单
+    </button>
+    <button class="btn1" type="primary" bindtap="bindCareTap" data-care="2" style="margin-left:230rpx;">
+        预约下单
+    </button>
+  </view>
 </view>

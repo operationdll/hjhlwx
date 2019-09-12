@@ -3,3 +3,10 @@
   font-size: 28rpx;
   padding-top: 4rpx;
 }
+
+.bnt{
+  background-color: white;
+  border: 1px solid #179B16;
+  color: #179B16;
+  font-size: 24rpx;
+}

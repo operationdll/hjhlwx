@@ -47,3 +47,11 @@
   align-items: center;
   height: 120rpx;
 }
+
+.weui-cells::before {
+  border-top: 0rpx;
+}
+
+.mycells::before {
+  border-top: 0rpx;
+}

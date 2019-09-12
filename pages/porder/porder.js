@@ -7,10 +7,10 @@ Page({
    * 页面的初始数据
    */
   data: {
-    care:0,
+    care: 0,
     flag: true,
     radioItems1: [
-      { name: '500/4小时', value: '0', total:500,checked: true },
+      { name: '500/4小时', value: '0', total: 500, checked: true },
       { name: '280/2小时', value: '1', total: 280 }
     ],
     radioItems2: [
@@ -21,7 +21,11 @@ Page({
     dateStart: Util.getToday(),
     dateEnd: Util.getToday(),
     start: Util.getToday(),
-    total1: 500
+    total1: 500,
+    regions: [{ name: "盐田区", id: 1 }, { name: "宝安区", id: 2 }, { name: "福田区", id: 3 }, { name: "罗湖区", id: 4 }, { name: "南山区", id: 5 }],
+    regionIndex: 0,
+    ycode:'',
+    title:''
   },
 
   /**
@@ -29,7 +33,8 @@ Page({
    */
   onLoad: function (options) {
     this.setData({
-      care: options.care
+      care: options.care,
+      title: options.title
     });
   },
   radioChange1: function (e) {
@@ -38,8 +43,8 @@ Page({
     var radioItems1 = this.data.radioItems1;
     for (var i = 0, len = radioItems1.length; i < len; ++i) {
       radioItems1[i].checked = radioItems1[i].value == e.detail.value;
-      if (radioItems1[i].value == e.detail.value){
-        total =  radioItems1[i].total;
+      if (radioItems1[i].value == e.detail.value) {
+        total = radioItems1[i].total;
       }
     }
     this.setData({
@@ -73,25 +78,16 @@ Page({
     });
   },
   submitForm: function () {
-    var that = this;
-    this.setData({
-      flag: false
+    let url = '../settlement/settlement?region=' + this.data.regions[this.data.regionIndex].name + '&ycode=' + this.data.ycode 
+      + '&title=' + this.data.title;
+    wx.navigateTo({
+      url: url
     });
-    wx.showToast({
-      title: '提交成功',
-      icon: 'none',
-      duration: 2000
-    });
-    setTimeout(function(){
-      that.setData({
-        flag: true
-      });
-    },2000);
   },
   submitForm1: function () {
     var that = this;
     let dateDif = Util.dateDif(this.data.dateStart, this.data.dateEnd);
-    if (dateDif < 0){
+    if (dateDif < 0) {
       wx.showToast({
         title: '请检查预定日期是否正确',
         icon: 'none',
@@ -99,35 +95,22 @@ Page({
       });
       return;
     }
-    let radioItems2 = this.data.radioItems2;
-    let total = 0;
-    for (let i = 0, len = radioItems2.length; i < len; ++i) {
-      if (radioItems2[i].checked){
-        total = radioItems2[i].total * (dateDif + 1);
-      }
-    }
-    wx.showModal({
-      title: '提示',
-      content: '总价:' + total + '元,是否提交订单？',
-      success(res) {
-        if (res.confirm) {
-          that.setData({
-            flag: false
-          });
-          wx.showToast({
-            title: '提交成功',
-            icon: 'none',
-            duration: 2000
-          });
-          setTimeout(function () {
-            that.setData({
-              flag: true
-            });
-          }, 2000);
-        } else if (res.cancel) {
-          console.log('用户点击取消')
-        }
-      }
+    let url = '../settlement/settlement?region=' + this.data.regions[this.data.regionIndex].name + '&ycode=' 
+      + this.data.ycode + '&start=' + this.data.dateStart + '&end=' + this.data.dateEnd + '&title=' + this.data.title;
+    wx.navigateTo({
+      url: url
     });
+  },
+  bindSexChange: function (e) {
+    console.log('picker sex 发生选择改变，索引值为', e.detail.value);
+    console.log("选中的id值:" + this.data.regions[e.detail.value].id);
+    this.setData({
+      regionIndex: e.detail.value
+    });
+  },
+  bindYcodeChange: function (e) {
+    this.setData({
+      ycode: e.detail.value
+    })
   }
 })

@@ -3,12 +3,34 @@
 
 <view class="page">
     <block wx:if="{{care==1}}">
-        <view class="page__hd">
-            <view class="page__title">立即下单</view>
-            <text style="color:red;">当天服务</text>
+        <view class="page__hd" style="border-bottom: 1rpx solid rgba(0,0,0,.1);">
+            <view class="page__title" style="padding-left:16px;">立即下单</view>
+            <text style="color:red;padding-left:16px;">当天服务</text>
         </view>
         <view class="page__bd">
-            <view class="weui-cells__title">服务价格</view>
+            <view class="weui-cells weui-cells_after-title">
+                <view class="weui-cell" style="padding: 4px 16px;">
+                    <view class="weui-cell__hd">
+                        <view class="weui-label">区域:</view>
+                    </view>
+                    <view class="weui-cell__bd">
+                        <picker bindchange="bindSexChange" value="{{regionIndex}}" range="{{regions}}" range-key="name">
+                            <view class="weui-select">{{regions[regionIndex].name}}</view>
+                        </picker>
+                    </view>
+                </view>
+            </view>
+            <view class="weui-cells weui-cells_after-title">
+                <view class="weui-cell ">
+                    <view class="weui-cell__hd">
+                        <view class="weui-label">优惠码:</view>
+                    </view>
+                    <view class="weui-cell__bd">
+                        <input class="weui-input" placeholder="请输入" value="{{ycode}}" bindchange="bindYcodeChange"/>
+                    </view>
+                </view>
+            </view>
+            <view class="weui-cells__title" style="border-bottom: 1rpx solid rgba(0,0,0,.1);">服务价格</view>
             <view class="weui-cells weui-cells_after-title">
                 <radio-group bindchange="radioChange1">
                     <label class="weui-cell weui-check__label" wx:for="{{radioItems1}}" wx:key="value">
@@ -20,19 +42,40 @@
                     </label>
                 </radio-group>
             </view>
-            <view class="total">总价:{{total1}}元</view>
             <view class="weui-cells__title">
                 <button class="weui-btn" type="primary" bindtap="submitForm">立即下单</button>
             </view>
         </view>
     </block>
     <block wx:else>
-        <view class="page__hd">
-            <view class="page__title">预约下单</view>
-            <text style="color:red;">预定时间服务</text>
+        <view class="page__hd" style="border-bottom: 1rpx solid rgba(0,0,0,.1);">
+            <view class="page__title" style="padding-left:16px;">预约下单</view>
+            <text style="color:red;padding-left:16px;">预定时间服务</text>
         </view>
         <view class="page__bd">
-            <view class="weui-cells__title">服务价格</view>
+            <view class="weui-cells weui-cells_after-title">
+                <view class="weui-cell" style="padding: 4px 16px;">
+                    <view class="weui-cell__hd">
+                        <view class="weui-label">区域:</view>
+                    </view>
+                    <view class="weui-cell__bd">
+                        <picker bindchange="bindSexChange" value="{{regionIndex}}" range="{{regions}}" range-key="name">
+                            <view class="weui-select">{{regions[regionIndex].name}}</view>
+                        </picker>
+                    </view>
+                </view>
+            </view>
+            <view class="weui-cells weui-cells_after-title">
+                <view class="weui-cell ">
+                    <view class="weui-cell__hd">
+                        <view class="weui-label">优惠码:</view>
+                    </view>
+                    <view class="weui-cell__bd">
+                        <input class="weui-input" placeholder="请输入" value="{{ycode}}" bindchange="bindYcodeChange"/>
+                    </view>
+                </view>
+            </view>
+            <view class="weui-cells__title" style="border-bottom: 1rpx solid rgba(0,0,0,.1);">服务价格</view>
             <view class="weui-cells weui-cells_after-title">
                 <radio-group bindchange="radioChange2">
                     <label class="weui-cell weui-check__label" wx:for="{{radioItems2}}" wx:key="value">
@@ -44,7 +87,7 @@
                     </label>
                 </radio-group>
             </view>
-            <view class="weui-cell ">
+            <view class="weui-cell mycells">
                 <view class="weui-cell__hd">
                     <view class="weui-label">预定日期</view>
                 </view>

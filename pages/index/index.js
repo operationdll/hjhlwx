@@ -15,7 +15,7 @@ Page({
   bindViewTap: function() {
     var that = this;
     // wx.navigateTo({
-    //   url: '../logs/logs'
+    //   url: '../product/product'
     // })
     util.showLoading(this, '加载中');
     // 登录
