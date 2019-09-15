@@ -126,7 +126,7 @@ Page({
   },
   submitForm: function () {
     let url = '../settlement/settlement?region=' + this.data.regions[this.data.regionIndex].name + '&ycode=' + this.data.ycode +
-      '&title=' + this.data.title + '&total=' + this.data.total + '&service=' + this.data.service;
+      '&title=' + this.data.title + '&total=' + this.data.total + '&service=' + this.data.service + '&start=' + Util.getToday();
     wx.navigateTo({
       url: url
     });

@@ -26,8 +26,12 @@
         <text>{{service}}</text>
       </view>
       <view class="intro" hidden="{{isShow}}">
-        <text>预定日期:</text>
+        <text>预订日期:</text>
         <text>{{start}}至{{end}}</text>
+      </view>
+      <view class="intro" hidden="{{!isShow}}">
+        <text>预订日期:</text>
+        <text>{{start}}</text>
       </view>
       <view class="intro">
         <text>总金额:</text>

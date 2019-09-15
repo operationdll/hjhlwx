@@ -1,5 +1,5 @@
 //获取工具类
-const util = require('../../utils/util.js');
+const Util = require('../../utils/util.js');
 //获取API
 const API = require('../../utils/api.js');
 
@@ -17,7 +17,7 @@ Page({
     scareIndex: 0,
     ifs: ["鼻胃管", "留置导尿管", "长期氧气", "气管造口", "腹膜透析", "直肠造口", "压疮", "其他"],
     ifsIndex: 0,
-    birthDate: util.getToday(),
+    birthDate: Util.getToday(),
     flag: true,
     showIfs: true,
     lastname: '',

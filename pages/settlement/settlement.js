@@ -27,10 +27,9 @@ Page({
         butBol: false
       });
     }
-    if (undefined != options.start) {
+    if (undefined != options.end) {
       this.setData({
         isShow: false,
-        start: options.start,
         end: options.end
       });
     }
@@ -41,6 +40,7 @@ Page({
     let total = Number(options.total);
     total = total + 50 - discount;
     this.setData({
+      start: options.start,
       region: options.region,
       ycode: options.ycode,
       title: options.title,

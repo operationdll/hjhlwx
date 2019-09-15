@@ -50,7 +50,7 @@
     <block wx:else>
         <view class="page__hd" style="border-bottom: 1rpx solid rgba(0,0,0,.1);">
             <view class="page__title" style="padding-left:16px;">预约下单</view>
-            <text style="color:red;padding-left:16px;">预定时间服务</text>
+            <text style="color:red;padding-left:16px;">预订时间服务</text>
         </view>
         <view class="page__bd">
             <view class="weui-cells weui-cells_after-title">
@@ -89,7 +89,7 @@
             </view>
             <view class="weui-cell mycells">
                 <view class="weui-cell__hd">
-                    <view class="weui-label">预定日期</view>
+                    <view class="weui-label">预订日期</view>
                 </view>
                 <view class="weui-cell__bd">
                     <picker mode="date" value="{{dateStart}}" start="{{start}}" bindchange="bindDateChange1">

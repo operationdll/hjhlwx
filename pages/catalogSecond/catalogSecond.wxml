@@ -10,7 +10,7 @@
         <text class="weui-media-box__desc">{{catalog.content}}</text>
       </view>
       <view>
-        <button class="bnt">预定</button>
+        <button class="bnt">预订</button>
       </view>
     </navigator>
   </scroll-view>

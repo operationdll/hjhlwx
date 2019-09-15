@@ -37,7 +37,7 @@
         "pagePath": "pages/order/order",
         "iconPath": "images/iconfont-cart.png",
         "selectedIconPath": "images/iconfont-cart-active.png",
-        "text": "我的预定"
+        "text": "我的预订"
       },
       {
         "pagePath": "pages/user/user",
