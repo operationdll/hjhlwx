@@ -23,6 +23,9 @@ Page({
     lastname: '',
     firstname: '',
     occupation: '',
+    address:'',
+    infoUsers: ["本人信息", "家属信息"],
+    infoUserIndex: 0,
   },
   submitForm: function () {
     var that = this;
@@ -51,6 +54,16 @@ Page({
     let id_gender = this.data.sexes[this.data.sexIndex].id;
     //出生日期
     let birthday = this.data.birthDate;
+    //详细地址
+    let address = this.data.address;
+    if (address == "") {
+      wx.showToast({
+        title: '请填写详细地址',
+        icon: 'none',
+        duration: 2000
+      });
+      return;
+    }
     //退休前职业
     let occupation = this.data.occupation;
     if (occupation == "") {
@@ -161,6 +174,16 @@ Page({
   bindIfsChange: function (e) {
     this.setData({
       ifsIndex: e.detail.value
+    });
+  },
+  bindAddressChange: function (e) {
+    this.setData({
+      address: e.detail.value
+    })
+  },
+  bindInfoUserChange: function (e) {
+    this.setData({
+      infoUserIndex: e.detail.value
     });
   }
 });

@@ -15,10 +15,10 @@
       </view>
   </view>
   <view class="bntView">
-    <button class="btn1" type="primary" bindtap="bindCareTap" data-care="1" style="margin-left:60rpx;">
+    <button class="btn1" type="primary" bindtap="bindCareTap" data-care="1">
         立即下单
     </button>
-    <button class="btn1" type="primary" bindtap="bindCareTap" data-care="2" style="margin-left:230rpx;">
+    <button class="btn1" type="primary" bindtap="bindCareTap" data-care="2">
         预约下单
     </button>
   </view>

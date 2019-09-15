@@ -19,11 +19,11 @@
       </view>
       <view class="intro">
         <text>优惠金额:</text>
-        <text>50元</text>
+        <text>{{discount}}元</text>
       </view>
       <view class="intro">
         <text>服务:</text>
-        <text>2小时</text>
+        <text>{{service}}</text>
       </view>
       <view class="intro" hidden="{{isShow}}">
         <text>预定日期:</text>
@@ -31,10 +31,10 @@
       </view>
       <view class="intro">
         <text>总金额:</text>
-        <text>xxx元</text>
+        <text>{{total}}元</text>
       </view>
     </view>
-    <view class="bntView">
+    <view class="bntView" wx:if="{{butBol}}">
       <button type="primary" bindtap="bindSubmit" style="width: 660rpx;">
         提交
       </button>

@@ -4,15 +4,16 @@
 }
 
 .btn1{
-  width: 200rpx;
-  float: left;
+  width: 350rpx;
 }
 
 .bntView{
   position:absolute;
   left:0;
-  bottom:30rpx;
+  bottom:90rpx;
   width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 
 .page{

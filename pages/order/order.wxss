@@ -8,3 +8,9 @@
 .weui-panel__hd{
   background-color:#EDEDED;
 }
+
+.title-state{
+  display: flex;
+  flex-direction: row;
+  justify-content:space-between;
+}
