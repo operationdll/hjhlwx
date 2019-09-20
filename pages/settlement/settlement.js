@@ -8,14 +8,15 @@ Page({
     region: '',
     ycode: '',
     start: '',
-    end: '',
     title: '',
     flag: true,
-    isShow: true,
     total: '',
     discount: 0,
     service: '',
-    butBol: true
+    butBol: true,
+    time:'',
+    userName:'',
+    address:'',
   },
 
   /**
@@ -25,12 +26,6 @@ Page({
     if (undefined != options.butBol) {
       this.setData({
         butBol: false
-      });
-    }
-    if (undefined != options.end) {
-      this.setData({
-        isShow: false,
-        end: options.end
       });
     }
     let discount = 0;
@@ -46,14 +41,18 @@ Page({
       title: options.title,
       total: total,
       discount: discount,
-      service: options.service
+      service: options.service,
+      time: options.time,
+      userName: options.userName,
+      address: options.address
     });
   },
   bindSubmit: function() {
     let that = this;
+    let total = this.data.total;
     wx.showModal({
       title: '提示',
-      content: '总价:xxx元,是否提交订单？',
+      content: '总价:' + total +'元,是否提交订单？',
       success(res) {
         if (res.confirm) {
           that.setData({
@@ -67,6 +66,9 @@ Page({
           setTimeout(function() {
             that.setData({
               flag: true
+            });
+            wx.switchTab({
+              url: '../order/order'
             });
           }, 2000);
         } else if (res.cancel) {

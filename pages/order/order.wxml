@@ -13,7 +13,7 @@
           <view>老人护理</view>
           <view style="color:red">已完成</view>
         </view>
-        <view class="weui-media-box__desc" style="color:#179B16;">预订日期：2019-10-10</view>
+        <view class="weui-media-box__desc" style="color:#179B16;">预订日期：2019-10-10 时间:14:20</view>
       </view>
     </view>
     <view class="weui-media-box weui-media-box_appmsg" bindtap="submitForm" data-yd="2">
@@ -25,7 +25,7 @@
           <view>晚晴关怀</view>
           <view style="color:red">已完成</view>
         </view>
-        <view class="weui-media-box__desc" style="color:#179B16;">预订日期：2019-10-10 至 2019-10-12</view>
+        <view class="weui-media-box__desc" style="color:#179B16;">预订日期：2019-10-19 时间:15:00</view>
       </view>
     </view>
   </scroll-view>

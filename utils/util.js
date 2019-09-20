@@ -44,19 +44,31 @@ const hideLoading = that => {
 //计算日期差(天)
 const dateDif = (startTime, endTime) => {
   //日期格式化
-  var start_date = new Date(startTime.replace(/-/g, "/"));
-  var end_date = new Date(endTime.replace(/-/g, "/"));
+  let start_date = new Date(startTime.replace(/-/g, "/"));
+  let end_date = new Date(endTime.replace(/-/g, "/"));
   //转成毫秒数，两个日期相减
-  var ms = end_date.getTime() - start_date.getTime();
+  let ms = end_date.getTime() - start_date.getTime();
   //转换成天数
-  var day = parseInt(ms / (1000 * 60 * 60 * 24));
+  let day = parseInt(ms / (1000 * 60 * 60 * 24));
   return day;
 }
+
+//天数加减
+const dateAddDay = (dayNum) => {
+  let date = new Date();
+  date.setDate(date.getDate() + dayNum);
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  return [year, month, day].map(formatNumber).join('-');
+}
+
 
 module.exports = {
   formatTime,
   showLoading,
   hideLoading,
   getToday,
-  dateDif
+  dateDif,
+  dateAddDay
 }

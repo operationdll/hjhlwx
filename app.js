@@ -1,6 +1,9 @@
+//获取工具类
+const Util = require('./utils/util.js');
+
 //app.js
 App({
-  onLaunch: function () {
+  onLaunch: function() {
     wx.hideTabBar();
     // 展示本地存储能力
     // var logs = wx.getStorageSync('logs') || []
@@ -35,6 +38,39 @@ App({
     })
   },
   globalData: {
-    userInfo: null
+    userInfo: null,
+    users: [{
+      lastname: '',
+      firstname: '',
+      sexes: 0,
+      birthDate: Util.getToday(),
+      phone: '',
+      regions: 0,
+      address: '',
+      occupation: '',
+      livings: 0,
+      flats: 0,
+      diseases: 0,
+      scares: 0,
+      ifs: [false, false, false, false, false, false, false, false],
+      otherTxt: '',
+      relationShip: 0
+    }, {
+      lastname: '',
+      firstname: '',
+      sexes: 0,
+      birthDate: Util.getToday(),
+      phone: '',
+      regions: 0,
+      address: '',
+      occupation: '',
+      livings: 0,
+      flats: 0,
+      diseases: 0,
+      scares: 0,
+      ifs: [false, false, false, false, false, false, false, false],
+      otherTxt: '',
+      relationShip: 0
+    }]
   }
 })

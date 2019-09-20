@@ -6,7 +6,6 @@
     "pages/catalog/catalog",
     "pages/user/user",
     "pages/catalogSecond/catalogSecond",
-    "pages/product/product",
     "pages/porder/porder",
     "pages/share/share",
     "pages/settlement/settlement"
@@ -43,7 +42,7 @@
         "pagePath": "pages/user/user",
         "iconPath": "images/iconfont-user.png",
         "selectedIconPath": "images/iconfont-user-active.png",
-        "text": "用户"
+        "text": "个人中心"
       },
       {
         "pagePath": "pages/share/share",

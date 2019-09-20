@@ -6,8 +6,16 @@
     <view class="content">
       <view class="brand">{{title}}</view>
       <view class="intro">
-        <text>区域:</text>
+        <text>护理人:</text>
+        <text>{{userName}}</text>
+      </view>
+      <view class="intro">
+        <text>服务区域:</text>
         <text>{{region}}</text>
+      </view>
+      <view class="intro">
+        <text>服务地址:</text>
+        <text>{{address}}</text>
       </view>
       <view class="intro">
         <text>区域附加费:</text>
@@ -25,13 +33,13 @@
         <text>服务:</text>
         <text>{{service}}</text>
       </view>
-      <view class="intro" hidden="{{isShow}}">
-        <text>预订日期:</text>
-        <text>{{start}}至{{end}}</text>
-      </view>
-      <view class="intro" hidden="{{!isShow}}">
+      <view class="intro">
         <text>预订日期:</text>
         <text>{{start}}</text>
+      </view>
+      <view class="intro">
+        <text>预订时间:</text>
+        <text>{{time}}</text>
       </view>
       <view class="intro">
         <text>总金额:</text>

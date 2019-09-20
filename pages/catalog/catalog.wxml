@@ -1,14 +1,65 @@
 <view class="page">
-    <button class='btn1' bindtap="bindCareTap" data-care="1" style="margin-top: 0px;">
-      <image class='btnImg' src='../../images/care1.png'></image>
-      <view>基础护理</view>
-    </button>
-    <button class='btn1' bindtap="bindCareTap" data-care="2">
-      <image class='btnImg' src='../../images/care2.png'></image>
-      <view>临床护理</view>
-    </button>
-    <button class='btn1' bindtap="bindCareTap" data-care="3">
-      <image class='btnImg' src='../../images/care3.png'></image>
-      <view>特别护理</view>
-    </button>
+    <view class="page__bd">
+        <view class="weui-panel weui-panel_access">
+            <view class="weui-panel__hd" style="padding:0px">
+              <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/topimg.jpg" style="width:100%;"/>
+            </view>
+            <view class="weui-panel__bd">
+                <view bindtap="bindCareTap" data-care="1" class="weui-media-box weui-media-box_appmsg">
+                    <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+                        <image class="weui-media-box__thumb" src="../../images/care1.png" />
+                    </view>
+                    <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+                        <view class="content">
+                          <view class="v1">
+                            <view class="v1-txt" style="padding-top:30rpx;"><view class="dot"></view>针对正常,半失能或失能老人提供护理服务</view>
+                            <view class="v1-txt"><view class="dot"></view>个人卫生及生活环境衞生管理 : 卧床擦浴, 洗头</view>
+                            <view class="v1-txt"><view class="dot"></view>生活照顾: 喂食，安全扶抱及活动，简易复康训练，</view>
+                            <view class="v1-txt" style="margin-left: 18rpx;">清楚测量及记录生命表征</view>
+                            <view class="v1-txt"><view class="dot"></view>执行医嘱: 提示服药，陪伴及协助运动，正确使用辅助工具</view>
+                            <view class="v1-txt"><view class="dot"></view>心理安抚: 亲切关怀，陪伴患者重新适应家居及社区生活</view>
+                            <view class="v1-txt"><view class="dot"></view>其他: 陪诊，离院照顾，紧急情况的护理及急救处理</view>
+                          </view>
+                        </view>
+                    </view>
+                </view>
+                <view bindtap="bindCareTap" data-care="2" class="weui-media-box weui-media-box_appmsg">
+                    <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+                        <image class="weui-media-box__thumb" src="../../images/care2.png" />
+                    </view>
+                    <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+                        <view class="content">
+                        <view class="v1">
+                          <view class="v1-txt" style="padding-top:30rpx;"><view class="dot"></view>针对病理, 手术后康复期的人士提供护理服务</view>
+                          <view class="v1-txt"><view class="dot"></view>个人卫生及生活环境衞生管理 : 卧床擦浴, 洗头</view>
+                          <view class="v1-txt"><view class="dot"></view>生活照顾: 喂食,安全扶抱及活动，简易复康训练，</view>
+                          <view class="v1-txt" style="margin-left: 18rpx;">清楚测量及记录生命表征</view>
+                          <view class="v1-txt"><view class="dot"></view>执行医嘱: 提示服药，陪伴及协助运动，正确使用辅助工具</view>
+                          <view class="v1-txt"><view class="dot"></view>心理安抚: 亲切关怀，陪伴患者重新适应家居及社区生</view>
+                          <view class="v1-txt"><view class="dot"></view>其 他: 陪诊，离院照顾，紧急情况的护理及急救处理</view>
+                        </view>
+                      </view>
+                    </view>
+                </view>
+                <view bindtap="bindCareTap" data-care="3" class="weui-media-box weui-media-box_appmsg">
+                    <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+                        <image class="weui-media-box__thumb" src="../../images/care3.png" />
+                    </view>
+                    <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+                        <view class="content">
+                        <view class="v1">
+                          <view class="v1-txt" style="padding-top:30rpx;"><view class="dot"></view>针对各种外科手术后需要进行伤口换药和拆线的人群</view>
+                          <view class="v1-txt"><view class="dot"></view>针对正常,半失能或失能老人或其他人群提供</view>
+                          <view class="v1-txt"><view class="dot"></view>个人卫生及生活环境衞生管理</view>
+                          <view class="v1-txt"><view class="dot"></view>压疮的风险预防、分级评估，初期压疮的护理、</view>
+                          <view class="v1-txt" style="margin-left: 18rpx;">换药分局部皮肤的按摩</view>
+                          <view class="v1-txt"><view class="dot"></view>执行医嘱: 提示服药，陪伴及协助运动，正确使用辅助工具</view>
+                          <view class="v1-txt"><view class="dot"></view>心理安抚: 亲切关怀，陪伴患者重新适应家居及社区生活</view>
+                        </view>
+                      </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
 </view>
