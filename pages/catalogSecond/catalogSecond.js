@@ -28,19 +28,18 @@ Page({
       products.push(catalog);
       catalog = { value: 5, content: '康复护理(协助功能锻炼、肢体康复按摩)' };
       products.push(catalog);
-      catalog = { value: 6, content: '慢病管理(高血压、糖尿病、肺心病等患者生命体征测量和记录，整理常规用药及并发症的预防指导)' };
-      products.push(catalog);
-      catalog = { value: 7, content: '健康规划(个性化护理记录，检测健康进度，提供健康规划指导)' };
+      catalog = { value: 6, content: '慢病管理(高血压、糖尿病、肺心病等患者生命体征测量和记录，整理常规用药及并发症的预防指导)', checked: true };
       products.push(catalog);
     } else if ('3' == options.care) {
       title = '特别护理';
       catalog = { value: 8, content: '压疮护理(压仓的风险预防、分级评估;初期压疮的护理、换药及局部皮肤的按摩)' };
       products.push(catalog);
-      catalog = { value: 9, content: '傷口換葯(上門觀察傷口情況, 作相應處理; 保持創面清潔, 清除傷口異物, 保持和防止傷口受損和外來感染。促進組織生長傷愈合)' };
-      products.push(catalog);
-      catalog = { value: 7, content: '健康规划(个性化护理记录，检测健康进度，提供健康规划指导)' };
+      catalog = { value: 9, content: '伤口换药(上门观察伤口情況, 作相应处理; 保持创面清洁, 清除伤口異物, 保持和防止伤口受损和外來感染。促进组织生长伤口愈合)' };
       products.push(catalog);
     }
+    catalog = { value: 7, content: '健康规划(个性化护理记录，检测健康进度，提供健康规划指导)', checked: true };
+    products.push(catalog);
+
     this.setData({
       title: title,
       products: products,
@@ -55,6 +54,12 @@ Page({
     });
   },
   productChange: function (e) {
+    if (e.detail.value.join(",").indexOf('6')==-1&&this.data.care!="3"){
+      e.detail.value.push("6");
+    }
+    if (e.detail.value.join(",").indexOf('7') == -1) {
+      e.detail.value.push("7");
+    }
 
     console.log('checkbox发生change事件，携带value值为：', e.detail.value);
 

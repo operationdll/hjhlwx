@@ -2,63 +2,84 @@
     <view class="page__bd">
         <view class="weui-panel weui-panel_access">
             <view class="weui-panel__hd" style="padding:0px">
-              <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/topimg.jpg" style="width:100%;"/>
+              <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/topimg.jpg" style="width:100%;height: 380rpx;"/>
             </view>
             <view class="weui-panel__bd">
-                <view bindtap="bindCareTap" data-care="1" class="weui-media-box weui-media-box_appmsg">
-                    <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
-                        <image class="weui-media-box__thumb" src="../../images/care1.png" />
+                <view bindtap="bindCareTap" data-care="1">
+                    <view class="title-content">
+                      <view class="title-line"></view>
+                        <image class="title-img" src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/care1.png"/>
+                      <view class="title-line"></view>
                     </view>
-                    <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-                        <view class="content">
-                          <view class="v1">
-                            <view class="v1-txt" style="padding-top:30rpx;"><view class="dot"></view>针对正常,半失能或失能老人提供护理服务</view>
-                            <view class="v1-txt"><view class="dot"></view>个人卫生及生活环境衞生管理 : 卧床擦浴, 洗头</view>
-                            <view class="v1-txt"><view class="dot"></view>生活照顾: 喂食，安全扶抱及活动，简易复康训练，</view>
-                            <view class="v1-txt" style="margin-left: 18rpx;">清楚测量及记录生命表征</view>
-                            <view class="v1-txt"><view class="dot"></view>执行医嘱: 提示服药，陪伴及协助运动，正确使用辅助工具</view>
-                            <view class="v1-txt"><view class="dot"></view>心理安抚: 亲切关怀，陪伴患者重新适应家居及社区生活</view>
-                            <view class="v1-txt"><view class="dot"></view>其他: 陪诊，离院照顾，紧急情况的护理及急救处理</view>
+                    <view class="content">
+                        <view class="content-title">
+                          <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/fwtc.png" class="content-img"></image>
+                          <text class="content-txt">(#1-4按需要选取，5-6为服务基本内容)</text>
+                        </view>
+                        <view class="detail">
+                          <view class="detail-row1">
+                            <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/jcnr1.png" class="detail-img"></image>
+                            <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/jcnr2.png" class="detail-img"></image>
+                            <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/jcnr3.png" class="detail-img"></image>
+                            <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/jcnr4.png" class="detail-img"></image>
+                          </view>
+                          <view class="detail-row1">
+                            <view style="display:block;" class="detail-img"></view>
+                            <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/jcnr5.png" class="detail-img"></image>
+                            <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/jcnr6.png" class="detail-img"></image>
+                            <view style="display:block;" class="detail-img"></view>
                           </view>
                         </view>
                     </view>
                 </view>
-                <view bindtap="bindCareTap" data-care="2" class="weui-media-box weui-media-box_appmsg">
-                    <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
-                        <image class="weui-media-box__thumb" src="../../images/care2.png" />
+                <view bindtap="bindCareTap" data-care="2">
+                    <view class="title-content">
+                      <view class="title-line"></view>
+                        <image class="title-img" src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/care2.png"/>
+                      <view class="title-line"></view>
                     </view>
-                    <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-                        <view class="content">
-                        <view class="v1">
-                          <view class="v1-txt" style="padding-top:30rpx;"><view class="dot"></view>针对病理, 手术后康复期的人士提供护理服务</view>
-                          <view class="v1-txt"><view class="dot"></view>个人卫生及生活环境衞生管理 : 卧床擦浴, 洗头</view>
-                          <view class="v1-txt"><view class="dot"></view>生活照顾: 喂食,安全扶抱及活动，简易复康训练，</view>
-                          <view class="v1-txt" style="margin-left: 18rpx;">清楚测量及记录生命表征</view>
-                          <view class="v1-txt"><view class="dot"></view>执行医嘱: 提示服药，陪伴及协助运动，正确使用辅助工具</view>
-                          <view class="v1-txt"><view class="dot"></view>心理安抚: 亲切关怀，陪伴患者重新适应家居及社区生</view>
-                          <view class="v1-txt"><view class="dot"></view>其 他: 陪诊，离院照顾，紧急情况的护理及急救处理</view>
+                    <view class="content">
+                        <view class="content-title">
+                          <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/fwtc.png" class="content-img"></image>
+                          <text class="content-txt">(#1-4按需要选取，5-6为服务基本内容)</text>
                         </view>
-                      </view>
+                        <view class="detail">
+                          <view class="detail-row1">
+                            <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/jcnr1-1.png" class="detail-img"></image>
+                            <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/jcnr2.png" class="detail-img"></image>
+                            <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/jcnr3.png" class="detail-img"></image>
+                            <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/jcnr4.png" class="detail-img"></image>
+                          </view>
+                          <view class="detail-row1">
+                            <view style="display:block;" class="detail-img"></view>
+                            <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/jcnr5.png" class="detail-img"></image>
+                            <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/jcnr6.png" class="detail-img"></image>
+                            <view style="display:block;" class="detail-img"></view>
+                          </view>
+                        </view>
                     </view>
                 </view>
-                <view bindtap="bindCareTap" data-care="3" class="weui-media-box weui-media-box_appmsg">
-                    <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
-                        <image class="weui-media-box__thumb" src="../../images/care3.png" />
+                <view bindtap="bindCareTap" data-care="3">
+                    <view class="title-content">
+                      <view class="title-line" style="margin-bottom:-4rpx;"></view>
+                        <image class="title-img" src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/care3.png"/>
+                      <view class="title-line" style="margin-bottom:-4rpx;"></view>
                     </view>
-                    <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-                        <view class="content">
-                        <view class="v1">
-                          <view class="v1-txt" style="padding-top:30rpx;"><view class="dot"></view>针对各种外科手术后需要进行伤口换药和拆线的人群</view>
-                          <view class="v1-txt"><view class="dot"></view>针对正常,半失能或失能老人或其他人群提供</view>
-                          <view class="v1-txt"><view class="dot"></view>个人卫生及生活环境衞生管理</view>
-                          <view class="v1-txt"><view class="dot"></view>压疮的风险预防、分级评估，初期压疮的护理、</view>
-                          <view class="v1-txt" style="margin-left: 18rpx;">换药分局部皮肤的按摩</view>
-                          <view class="v1-txt"><view class="dot"></view>执行医嘱: 提示服药，陪伴及协助运动，正确使用辅助工具</view>
-                          <view class="v1-txt"><view class="dot"></view>心理安抚: 亲切关怀，陪伴患者重新适应家居及社区生活</view>
+                    <view class="content" style="margin-top:4rpx;">
+                        <view class="content-title">
+                          <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/fwtc.png" class="content-img"></image>
+                          <text class="content-txt">(#1及2按需要选取，3为服务基本内容)</text>
                         </view>
-                      </view>
+                        <view class="detail">
+                          <view class="detail-row1">
+                            <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/yazhi.png" class="detail-img"></image>
+                            <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/shangkou.png" class="detail-img"></image>
+                            <image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/jcnr6-1.png" class="detail-img"></image>
+                          </view>
+                        </view>
                     </view>
                 </view>
+                <view style="display:block;height:60rpx;width:100%"></view>
             </view>
         </view>
     </view>
