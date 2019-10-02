@@ -2,6 +2,8 @@
 const app = getApp();
 //获取API
 const API = require('../../utils/api.js');
+//获取工具类
+const Util = require('../../utils/util.js');
 
 Page({
   data: {
@@ -13,55 +15,64 @@ Page({
       id: 2
     }],
     sexIndex: 0,
-    livings: ["独居", "与配偶同住", "与子女同住", "与保姆同住"],
+    livings: app.globalData.livings,
     livingIndex: 0,
-    flats: ["私人屋苑", "宿舍楼(无电梯)", "平房"],
+    flats: app.globalData.flats,
     flatIndex: 0,
-    diseases: ["健康良好", "长期病患", "曾施手术", "失明", "失聪", "其他"],
+    diseases: app.globalData.diseases,
     diseaseIndex: 0,
-    scares: ["无", "有"],
+    scares: app.globalData.scares,
     scareIndex: 0,
-    ifs: [{ name: '鼻胃管', value: '0' }, { name: '留置导尿管', value: '1' }, { name: '长期氧气', value: '2' }, { name: '气管造口', value: '3' }, { name: '腹膜透析', value: '4' }, { name: '直肠造口', value: '5' }, { name: '压疮', value: '6' }, { name: '其他', value: '7' }],
+    ifs: app.globalData.ifs,
     birthDate: '',
     flag: true,
     showIfs: true,
-    showOther:true,
+    showOther: true,
     lastname: '',
     firstname: '',
     occupation: '',
     address: '',
     infoUsers: ["本人信息", "新增人员"],
     infoUserIndex: 0,
-    relationShip: ["本人", "父母亲", "兄弟", "姐妹", "儿女"],
-    relationShipIndex: 0,
+    relationship: ["本人"],
+    relationshipIndex: 0,
     phone: '',
-    regions: [{
-      name: "盐田区",
-      id: 1
-    }, {
-      name: "宝安区",
-      id: 2
-    }, {
-      name: "福田区",
-      id: 3
-    }, {
-      name: "罗湖区",
-      id: 4
-    }, {
-      name: "南山区",
-      id: 5
-    }],
+    regions: [],
     regionIndex: 0,
-    otherTxt:''
+    otherTxt: '',
+    end: Util.getToday()
   },
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
+    let that = this;
     let user = app.globalData.users[0];
     this.setUserInfo(user);
+    //获取区域信息
+    this.setData({
+      regions: app.globalData.regions
+    });
+    //判断是否新用户
+    if (app.globalData.isNewUser) {
+      this.setData({
+        infoUsers: ["本人信息"]
+      });
+    }else{
+      let infoUsers = this.data.infoUsers;
+      let users = app.globalData.users;
+      if (users.length>2){
+        for (let i = 2; i < users.length;i++){
+          let name = users[i].lastname + users[i].firstname;
+          infoUsers.push(name);
+        }
+        this.setData({
+          infoUsers: infoUsers
+        });
+      }
+    }
   },
-  setUserInfo: function (user){
+  setUserInfo: function(user) {
     if (user.scares == 0) {
       //是否显示如有
       this.setData({
@@ -74,9 +85,9 @@ Page({
     }
     let showOther = true;
     let ifs = this.data.ifs;
-    for (let i = 0; i < user.ifs.length;i++){
+    for (let i = 0; i < user.ifs.length; i++) {
       ifs[i].checked = user.ifs[i];
-      if(i==7){
+      if (i == 7) {
         showOther = !user.ifs[i];
       }
     }
@@ -94,16 +105,15 @@ Page({
       diseaseIndex: user.diseases,
       scareIndex: user.scares,
       otherTxt: user.otherTxt,
-      relationShipIndex: user.relationShip,
+      relationshipIndex: user.relationship,
       ifs: ifs,
       showOther: showOther
     });
   },
   submitForm: function() {
-    var that = this;
+    let that = this;
     //姓
     let lastname = this.data.lastname;
-    console.log(lastname);
     if (lastname == "") {
       wx.showToast({
         title: '请填写用户姓',
@@ -161,14 +171,20 @@ Page({
     //如有
     let ifsValue = this.data.ifs;
     let ifs = [];
+    //特别护理表单
+    let special_care_detail = [];
     for (let i = 0; i < ifsValue.length; i++) {
       ifs[i] = ifsValue[i].checked;
+      if (ifs[i]) {
+        special_care_detail.push(ifsValue[i].name);
+      }
     }
     //其他
     let otherTxt = this.data.otherTxt;
     //关系
-    let relationShip = this.data.relationShipIndex;
-    let user = { 
+    let relationship = this.data.relationshipIndex;
+    let user = {
+      id: 0,
       lastname: lastname,
       firstname: firstname,
       sexes: id_gender,
@@ -183,52 +199,120 @@ Page({
       scares: special_care,
       ifs: ifs,
       otherTxt: otherTxt,
-      relationShip: relationShip
+      relationship: relationship
     };
-    //更新全局变量
-    if (this.data.infoUserIndex==1){
-      //修改信息人
-      let infoUsers = this.data.infoUsers;
-      let name = lastname + firstname;
-      infoUsers.push(name);
-      this.setData({
-        infoUsers: infoUsers,
-        infoUserIndex: 0
-      });
-      app.globalData.users.push(user);
-      user = app.globalData.users[0];
-      this.setUserInfo(user);
-    }else{
-      app.globalData.users[this.data.infoUserIndex] = user;
-    }
-    let param = {};
-    param.lastname = lastname;
-    param.firstname = firstname;
-    param.id_gender = id_gender;
-    param.birthday = birthday;
-    param.occupation = occupation;
-    param.living_status = living_status;
-    param.home_type = home_type;
-    param.health_status = health_status;
-    param.special_care = special_care;
 
-    this.setData({
-      flag: false
+    // 获取登陆凭证
+    wx.login({
+      success: res => {
+        let param = {};
+        param.id = app.globalData.users[0].id;
+        param.lastname = lastname;
+        param.firstname = firstname;
+        id_gender = that.data.sexes[id_gender].id;
+        param.id_gender = id_gender;
+        param.birthday = birthday;
+        param.user_name = res.code;
+        param.occupation = occupation;
+        param.living_status = that.data.livings[living_status];
+        param.home_type = that.data.flats[home_type];
+        param.health_status = that.data.diseases[health_status];
+        param.special_care = that.data.scares[special_care];
+        if (otherTxt != '') {
+          special_care_detail.push(otherTxt);
+        }
+        param.special_care_detail = special_care_detail;
+        param.id_global_demand = that.data.regions[regionIndex].id;
+        param.address = address;
+        param.phone = phone;
+        param.relationship = that.data.relationship[relationship];
+        //创建用户信息
+        if (that.data.infoUserIndex == 0){
+          API.createCustomer(that, function (res) {
+            if (res.data.customer !== undefined) {
+              user.id = res.data.customer.id;
+              //添加
+              if (that.data.infoUserIndex == 1) {
+                let name = lastname + firstname;
+                that.addUser(name, user);
+              } else {
+                //修改
+                that.updateUser(user);
+              }
+              //更新下拉选项
+              if (that.data.infoUsers.length == 1) {
+                that.setData({
+                  infoUsers: ["本人信息", "新增人员"]
+                });
+                app.globalData.isNewUser = false;
+              }
+              wx.showToast({
+                title: '提交成功',
+                icon: 'none',
+                duration: 2000
+              });
+            } else {
+              wx.showToast({
+                title: '提交失败',
+                icon: 'none',
+                duration: 2000
+              });
+            }
+          }, param);
+        }else{//创建亲戚
+          API.addCustomer(that, function (res) {
+            if (res.data.address !== undefined) {
+              user.id = res.data.address.id;
+              // 更新全局变量
+              if (that.data.infoUserIndex == 1) {
+                //添加
+                let name = lastname + firstname;
+                that.addUser(name, user);
+              } else {
+                //修改
+                that.updateUser(user);
+              }
+            } else {
+              wx.showToast({
+                title: '提交失败',
+                icon: 'none',
+                duration: 2000
+              });
+            }
+          }, param);
+        }
+      }
     });
+  },
+  addUser: function (name, user){
+    let infoUsers = this.data.infoUsers;
+    infoUsers.push(name);
+    this.setData({
+      infoUsers: infoUsers,
+      infoUserIndex: 0
+    });
+    app.globalData.users.push(user);
+    this.setUserInfo(app.globalData.users[0]);
     wx.showToast({
-      title: '提交成功',
+      title: '添加成功',
       icon: 'none',
       duration: 2000
     });
-    setTimeout(function() {
-      that.setData({
-        flag: true
-      });
-    }, 2000);
-    //调用API新增或修改用户信息
-    // API.updateUserInfo(this,function(res){
-    //   console.log(res);
-    // },param);
+  },
+  updateUser: function (user) {
+    //添加
+    let name = user.lastname + user.firstname;
+    let infoUsers = this.data.infoUsers;
+    infoUsers[this.data.infoUserIndex] = name;
+    this.setData({
+      infoUsers: infoUsers
+    });
+    app.globalData.users[this.data.infoUserIndex] = user;
+    wx.showToast({
+      title: '修改成功',
+      icon: 'none',
+      duration: 2000
+    });
   },
   bindLnameChange: function(e) {
     this.setData({
@@ -297,28 +381,39 @@ Page({
     })
   },
   bindInfoUserChange: function(e) {
+    //本人
+    if (e.detail.value==0){
+      this.setData({
+        relationship: ["本人"]
+      });
+    }else{
+      this.setData({
+        relationship: ["父母亲", "兄弟", "姐妹", "儿女"]
+      });
+    }
     let user = app.globalData.users[e.detail.value];
     this.setUserInfo(user);
     this.setData({
       infoUserIndex: e.detail.value
     });
   },
-  bindRelationShipChange: function (e) {
+  bindRelationShipChange: function(e) {
     this.setData({
-      relationShipIndex: e.detail.value
+      relationshipIndex: e.detail.value
     });
   },
-  bindRegionChange: function (e) {
+  bindRegionChange: function(e) {
     console.log('picker sex 发生选择改变，索引值为', e.detail.value);
     console.log("选中的id值:" + this.data.regions[e.detail.value].id);
     this.setData({
       regionIndex: e.detail.value
     });
   },
-  ifsChange: function (e) {
+  ifsChange: function(e) {
     console.log('checkbox发生change事件，携带value值为：', e.detail.value);
 
-    var ifs = this.data.ifs, values = e.detail.value;
+    var ifs = this.data.ifs,
+      values = e.detail.value;
     for (var i = 0, lenI = ifs.length; i < lenI; ++i) {
       ifs[i].checked = false;
 
@@ -335,7 +430,7 @@ Page({
       showOther: showOther
     });
   },
-  bindOtherTxtChange: function (e) {
+  bindOtherTxtChange: function(e) {
     this.setData({
       otherTxt: e.detail.value
     })

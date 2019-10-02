@@ -50,7 +50,7 @@
                     <text class="redStart">*</text>
                     <view class="weui-label">出生日期:</view>
                 </view>
-                <picker mode="date" value="{{birthDate}}" start="1900-01-01" bindchange="bindDateChange">
+                <picker mode="date" value="{{birthDate}}" start="1900-01-01" bindchange="bindDateChange" end="{{end}}">
                     <view class="weui-input">{{birthDate}}</view>
                 </picker>
             </view>
@@ -197,8 +197,8 @@
                     <view class="weui-label">关系:</view>
                 </view>
                 <view class="weui-cell__bd">
-                    <picker bindchange="bindRelationShipChange" value="{{relationShipIndex}}" range="{{relationShip}}">
-                        <view class="weui-select">{{relationShip[relationShipIndex]}}</view>
+                    <picker bindchange="bindRelationShipChange" value="{{relationshipIndex}}" range="{{relationship}}">
+                        <view class="weui-select">{{relationship[relationshipIndex]}}</view>
                     </picker>
                 </view>
             </view>

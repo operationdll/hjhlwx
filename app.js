@@ -39,23 +39,39 @@ App({
   },
   globalData: {
     userInfo: null,
-    users: [{
-      lastname: '',
-      firstname: '',
-      sexes: 0,
-      birthDate: Util.getToday(),
-      phone: '',
-      regions: 0,
-      address: '',
-      occupation: '',
-      livings: 0,
-      flats: 0,
-      diseases: 0,
-      scares: 0,
-      ifs: [false, false, false, false, false, false, false, false],
-      otherTxt: '',
-      relationShip: 0
+    regions: [],
+    livings:["独居", "与配偶同住", "与子女同住", "与保姆同住"],
+    flats: ["私人屋苑", "宿舍楼(无电梯)", "平房"],
+    diseases: ["健康良好", "长期病患", "曾施手术", "失明", "失聪", "其他"],
+    scares: ["无", "有"],
+    ifs: [{
+      name: '鼻胃管',
+      value: '0'
     }, {
+      name: '留置导尿管',
+      value: '1'
+    }, {
+      name: '长期氧气',
+      value: '2'
+    }, {
+      name: '气管造口',
+      value: '3'
+    }, {
+      name: '腹膜透析',
+      value: '4'
+    }, {
+      name: '直肠造口',
+      value: '5'
+    }, {
+      name: '压疮',
+      value: '6'
+    }, {
+      name: '其他',
+      value: '7'
+    }],
+    isNewUser: true,//是否新用户
+    users: [{
+      id:0,
       lastname: '',
       firstname: '',
       sexes: 0,
@@ -70,7 +86,24 @@ App({
       scares: 0,
       ifs: [false, false, false, false, false, false, false, false],
       otherTxt: '',
-      relationShip: 0
+      relationship: 0
+    }, {
+      id: 0,
+      lastname: '',
+      firstname: '',
+      sexes: 0,
+      birthDate: Util.getToday(),
+      phone: '',
+      regions: 0,
+      address: '',
+      occupation: '',
+      livings: 0,
+      flats: 0,
+      diseases: 0,
+      scares: 0,
+      ifs: [false, false, false, false, false, false, false, false],
+      otherTxt: '',
+      relationship: 0
     }]
   }
 })

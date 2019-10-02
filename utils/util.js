@@ -63,7 +63,6 @@ const dateAddDay = (dayNum) => {
   return [year, month, day].map(formatNumber).join('-');
 }
 
-
 module.exports = {
   formatTime,
   showLoading,

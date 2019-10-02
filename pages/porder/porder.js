@@ -2,6 +2,8 @@
 const app = getApp();
 //获取工具类
 const Util = require('../../utils/util.js');
+//获取API
+const API = require('../../utils/api.js');
 
 Page({
   /**
@@ -26,22 +28,7 @@ Page({
     start: Util.dateAddDay(1),
     end: Util.dateAddDay(31),
     total: 500,
-    regions: [{
-      name: "盐田区",
-      id: 1
-    }, {
-      name: "宝安区",
-      id: 2
-    }, {
-      name: "福田区",
-      id: 3
-    }, {
-      name: "罗湖区",
-      id: 4
-    }, {
-      name: "南山区",
-      id: 5
-    }],
+    regions: [],
     regionIndex: 0,
     ycode: '',
     title: '',
@@ -59,6 +46,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
+    let that = this;
     let titles1 = '当天下单';
     let titles2 = '当天服务';
     if (options.care != 1) {
@@ -94,11 +82,8 @@ Page({
         infoUsers: infoUsers
       });
     }
-    //设置默认信息
-    this.setData({
-      address: app.globalData.users[0].address,
-      regionIndex: app.globalData.users[0].regions
-    });
+    //获取区域信息
+    this.setData({ regions: app.globalData.regions });
   },
   radioChange: function(e) {
     console.log('radio发生change事件，携带value值为：', e.detail.value);
