@@ -4,7 +4,7 @@ const app = getApp();
 const API = require('../../utils/api.js');
 //获取工具类
 const Util = require('../../utils/util.js');
-
+let that;
 Page({
   data: {
     sexes: [{
@@ -40,13 +40,14 @@ Page({
     regions: [],
     regionIndex: 0,
     otherTxt: '',
-    end: Util.getToday()
+    end: Util.getToday(),
+    showDelBnt:true
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    let that = this;
+    that = this;
     let user = app.globalData.users[0];
     this.setUserInfo(user);
     //获取区域信息
@@ -111,7 +112,6 @@ Page({
     });
   },
   submitForm: function() {
-    let that = this;
     //姓
     let lastname = this.data.lastname;
     if (lastname == "") {
@@ -206,7 +206,7 @@ Page({
     wx.login({
       success: res => {
         let param = {};
-        param.id = app.globalData.users[0].id;
+        param.id = app.globalData.users[that.data.infoUserIndex].id;
         param.lastname = lastname;
         param.firstname = firstname;
         id_gender = that.data.sexes[id_gender].id;
@@ -226,60 +226,85 @@ Page({
         param.address = address;
         param.phone = phone;
         param.relationship = that.data.relationship[relationship];
-        //创建用户信息
+        //创建/更新 用户
         if (that.data.infoUserIndex == 0){
-          API.createCustomer(that, function (res) {
-            if (res.data.customer !== undefined) {
-              user.id = res.data.customer.id;
-              //添加
-              if (that.data.infoUserIndex == 1) {
-                let name = lastname + firstname;
-                that.addUser(name, user);
-              } else {
-                //修改
-                that.updateUser(user);
-              }
-              //更新下拉选项
-              if (that.data.infoUsers.length == 1) {
-                that.setData({
-                  infoUsers: ["本人信息", "新增人员"]
+          //添加
+          if (param.id == 0) {
+            API.createCustomer(that, function (res) {
+              if (res.data.customer !== undefined) {
+                user.id = res.data.customer.id;
+                app.globalData.users[0] = user;
+                //更新下拉选项
+                if (that.data.infoUsers.length == 1) {
+                  that.setData({
+                    infoUsers: ["本人信息", "新增人员"]
+                  });
+                  app.globalData.isNewUser = false;
+                }
+                wx.showToast({
+                  title: '提交成功',
+                  icon: 'none',
+                  duration: 2000
                 });
-                app.globalData.isNewUser = false;
+              } else {
+                wx.showToast({
+                  title: '提交失败',
+                  icon: 'none',
+                  duration: 2000
+                });
               }
-              wx.showToast({
-                title: '提交成功',
-                icon: 'none',
-                duration: 2000
-              });
-            } else {
-              wx.showToast({
-                title: '提交失败',
-                icon: 'none',
-                duration: 2000
-              });
-            }
-          }, param);
-        }else{//创建亲戚
-          API.addCustomer(that, function (res) {
-            if (res.data.address !== undefined) {
-              user.id = res.data.address.id;
-              // 更新全局变量
-              if (that.data.infoUserIndex == 1) {
-                //添加
+            }, param);
+          } else {//修改
+            API.updateUser(that, function (res) { 
+              if (res.statusCode == 400){
+                wx.showToast({
+                  title: '修改失败',
+                  icon: 'none',
+                  duration: 2000
+                });
+              }else{
+                user.id = param.id;
+                app.globalData.users[that.data.infoUserIndex] = user;
+                wx.showToast({
+                  title: '修改成功',
+                  icon: 'none',
+                  duration: 2000
+                });
+              }
+            }, param);
+          }
+        } else {//创建/更新 亲戚
+          //添加
+          if (param.id == 0) {
+            API.addCustomer(that, function (res) {
+              if (res.data.address !== undefined) {
+                user.id = res.data.address.id;
                 let name = lastname + firstname;
                 that.addUser(name, user);
               } else {
-                //修改
+                wx.showToast({
+                  title: '提交失败',
+                  icon: 'none',
+                  duration: 2000
+                });
+              }
+            }, param);
+          } else {
+            param.main = app.globalData.users[0].id;
+            //修改
+            API.updateMember(that, function (res) {
+              if (res.statusCode == 400) {
+                wx.showToast({
+                  title: '修改失败',
+                  icon: 'none',
+                  duration: 2000
+                });
+              } else {
+                user.id = param.id;
                 that.updateUser(user);
               }
-            } else {
-              wx.showToast({
-                title: '提交失败',
-                icon: 'none',
-                duration: 2000
-              });
-            }
-          }, param);
+            }, param);
+          }
         }
       }
     });
@@ -358,6 +383,9 @@ Page({
   },
   bindScareChange: function(e) {
     if (e.detail.value == 0) {
+      app.globalData.users[that.data.infoUserIndex].ifs = [false, false, false, false, false, false, false, false];
+      app.globalData.users[that.data.infoUserIndex].otherTxt = '';
+      that.setUserInfo(app.globalData.users[that.data.infoUserIndex]);
       this.setData({
         showIfs: true
       });
@@ -384,12 +412,21 @@ Page({
     //本人
     if (e.detail.value==0){
       this.setData({
-        relationship: ["本人"]
+        relationship: ["本人"],
+        showDelBnt: true
       });
     }else{
       this.setData({
+        showDelBnt: true
+      });
+      this.setData({
         relationship: ["父母亲", "兄弟", "姐妹", "儿女"]
       });
+      if (e.detail.value != 1){
+        this.setData({
+          showDelBnt: false
+        });
+      }
     }
     let user = app.globalData.users[e.detail.value];
     this.setUserInfo(user);
@@ -433,6 +470,44 @@ Page({
   bindOtherTxtChange: function(e) {
     this.setData({
       otherTxt: e.detail.value
+    })
+  },
+  deleteUser: function (e) {
+    let id = app.globalData.users[this.data.infoUserIndex].id;
+    let param = { id: id};
+
+    wx.showModal({
+      title: '提示',
+      content: '是否删除该信息',
+      success(res) {
+        if (res.confirm) {
+          API.deleteUser(that, function (res) {
+            if (res.statusCode==200){
+              app.globalData.users.splice(that.data.infoUserIndex, 1);
+              that.setUserInfo(app.globalData.users[0]);
+              let infoUsers = that.data.infoUsers;
+              infoUsers.splice(that.data.infoUserIndex, 1);
+              that.setData({
+                infoUsers: infoUsers,
+                infoUserIndex: 0,
+                showDelBnt: true,
+                relationship: ["本人"]
+              });
+              wx.showToast({
+                title: '删除成功',
+                icon: 'none',
+                duration: 2000
+              });
+            }else{
+              wx.showToast({
+                title: '删除失败',
+                icon: 'none',
+                duration: 2000
+              });
+            }
+          }, param);
+        }
+      }
     })
   }
 });

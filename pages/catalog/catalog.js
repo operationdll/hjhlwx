@@ -16,11 +16,6 @@ Page({
    */
   onLoad: function (options) {
     let that = this;
-    // API.getFristCatalogs(this,function(res){
-    //   that.setData({
-    //     catalogs: res.data.hotels
-    //   });
-    // });
   },
   //事件处理函数
   bindCareTap: function (event) {

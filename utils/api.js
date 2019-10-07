@@ -34,7 +34,7 @@ const baseAPI = (that, url, method, callback, param = {}) => {
 }
 
 //APIPostXMl数据
-const basePostXML = (that, url, callback, xml) => {
+const baseXML = (that, url, method, callback, xml) => {
   //调用api
   wx.showLoading({
     title: '加载中',
@@ -44,7 +44,7 @@ const basePostXML = (that, url, callback, xml) => {
   });
   wx.request({
     url: API_URL + url + "?output_format=JSON" + "&ws_key=" + KEY,
-    method: 'POST',
+    method: method,
     data: xml,
     header: { 'content-type': 'text/xml' },
     success(res) {
@@ -64,24 +64,6 @@ const basePostXML = (that, url, callback, xml) => {
       });
     }
   });
-}
-
-//获取一级项目列表
-const getFristCatalogs = (that, callback) => {
-  let param = {};
-  param.display = 'full';
-  baseAPI(that, '/hotels', 'GET', callback, param);
-}
-
-//登陆
-const login = (that, callback) => {
-  baseAPI(that, '/login', 'POST', callback);
-}
-
-//修改用户信息
-const updateUserInfo = (that, callback, param) => {
-  param.schema = 'synopsis';
-  baseAPI(that, '/customers', 'POST', callback, param);
 }
 
 //根据code获取用户信息
@@ -114,7 +96,7 @@ const createCustomer = (that, callback, param) => {
                     <address required="true">`+ param.address + `</address>
                 </customer>
             </prestashop>`;
-  basePostXML(that, '/customers', callback, xml);
+  baseXML(that, '/customers', 'POST', callback, xml);
 }
 
 //创建亲戚信息
@@ -143,7 +125,7 @@ const addCustomer = (that, callback, param) => {
                     <relationship maxSize="200">`+ param.relationship + `</relationship>
                 </address>
             </prestashop>`;
-  basePostXML(that, '/addresses', callback, xml);
+  baseXML(that, '/addresses', 'POST', callback, xml);
 }
 
 //获取区域信息
@@ -151,12 +133,74 @@ const getArea = (that, callback, param) => {
   baseAPI(that, '/global_demand', 'GET', callback, param);
 }
 
+//删除亲属信息
+const deleteUser = (that, callback, param) => {
+  baseAPI(that, '/addresses/' + param.id, 'DELETE', callback);
+}
+
+//修改本人信息
+const updateUser = (that, callback, param) => {
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<prestashop xmlns:xlink="http://www.w3.org/1999/xlink">
+    <customer>
+    	<id required="true">`+ param.id + `</id>
+        <lastname required="true" maxSize="32" format="isName">`+ param.lastname + `</lastname>
+        <firstname required="true" maxSize="32" format="isName">`+ param.firstname + `</firstname>
+        <id_gender format="isUnsignedId">`+ param.id_gender + `</id_gender>
+        <birthday format="isBirthDate">`+ param.birthday + `</birthday>
+        <phone required="true" maxSize="3000">`+ param.phone + `</phone>
+        <occupation required="true" maxSize="3000">`+ param.occupation + `</occupation>
+        <living_status required="true" maxSize="200">`+ param.living_status + `</living_status>
+        <home_type required="true" maxSize="200">`+ param.home_type + `</home_type>
+        <health_status required="true" maxSize="200">`+ param.health_status + `</health_status>
+        <health_status_detail maxSize="3000"> ["长期病患", "长期病患1", "长期病患2", "长期病患3"] </health_status_detail>       
+		<special_care required="true" maxSize="200">`+ param.special_care + `</special_care>
+        <special_care_detail maxSize="3000">`+ param.special_care_detail + `</special_care_detail>
+        <id_global_demand required="true">`+ param.id_global_demand + `</id_global_demand>
+		<address required="true">`+ param.address + `</address>
+        <login_type>1</login_type>
+    </customer>
+</prestashop>
+`;
+  baseXML(that, '/customers', 'PUT', callback, xml);
+}
+
+//修改亲属信息
+const updateMember = (that, callback, param) => {
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<prestashop xmlns:xlink="http://www.w3.org/1999/xlink">
+    <address>
+        <id required="true" format="isNullOrUnsignedId">`+ param.id + `</id>
+        <id_customer required="true" format="isNullOrUnsignedId">`+ param.main + `</id_customer>
+        <alias required="true" >email@icare.com</alias>
+        <id_country required="true" format="isUnsignedId">5</id_country>
+        <lastname required="true" maxSize="32" format="isName">`+ param.lastname + `</lastname>
+        <firstname required="true" maxSize="32" format="isName">`+ param.firstname + `</firstname>
+        <address1 required="true" maxSize="128" format="isAddress">`+ param.address + `</address1>
+        <phone maxSize="32" format="isPhoneNumber">`+ param.phone + `</phone>
+        <phone_mobile maxSize="32" format="isPhoneNumber">phone_mobile111</phone_mobile>
+        <id_gender required="true">`+ param.id_gender + `</id_gender>
+        <birthday required="true" format="isDate">`+ param.birthday + `</birthday>
+        <id_global_demand required="true">`+ param.id_global_demand + `</id_global_demand>
+        <occupation maxSize="3000">`+ param.occupation + `</occupation>
+        <living_status maxSize="200">`+ param.living_status + `</living_status>
+        <home_type maxSize="200">`+ param.home_type + `</home_type>
+        <health_status maxSize="200">`+ param.health_status + `</health_status>
+        <health_status_detail maxSize="3000">health_status_detail111</health_status_detail>
+        <special_care maxSize="200">`+ param.special_care + `</special_care>
+        <special_care_detail maxSize="3000">`+ param.special_care_detail + `</special_care_detail>
+        <relationship maxSize="200">`+ param.relationship + `</relationship>
+    </address>
+</prestashop>`;
+  baseXML(that, '/addresses', 'PUT', callback, xml);
+}
+
 module.exports = {
-  login,
-  updateUserInfo,
-  getFristCatalogs,
   getCustomer,
   createCustomer,
   getArea,
-  addCustomer
+  addCustomer,
+  deleteUser,
+  updateUser,
+  updateMember
 }

@@ -24,7 +24,7 @@ Page({
             let customers = res.data.customers;
             app.globalData.isNewUser = false;
 
-            //console.log(customers);
+            // console.log(customers);
             
             //本人信息
             let customer = customers[0];

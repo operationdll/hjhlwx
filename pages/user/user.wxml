@@ -218,6 +218,7 @@
         </view>
         <view class="weui-cells__title">
             <button class="weui-btn" type="primary" bindtap="submitForm">确定</button>
+            <button class="weui-btn" type="warn" bindtap="deleteUser" hidden="{{showDelBnt}}">删除</button>
         </view>
     </view>
 </view>
