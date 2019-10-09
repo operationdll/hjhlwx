@@ -1,0 +1,83 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index"
+		},
+		{
+			"path": "pages/main/main"
+		}, {
+			"path": "pages/catalog/catalog"
+		}, {
+			"path": "pages/order/order"
+		}, {
+			"path": "pages/user/user"
+		}, {
+			"path": "pages/share/share"
+		}
+	    ,{
+            "path" : "pages/settlement/settlement",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/catalogSecond/catalogSecond",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/porder/porder",
+            "style" : {}
+        }
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "汇骏护理",
+		"navigationBarBackgroundColor": "white",
+		"backgroundColor": "white"
+	},
+	"tabBar": {
+		"color": "#999999",
+		"selectedColor": "#07c160",
+		"borderStyle": "black",
+		"backgroundColor": "#F8F8F8",
+		"list": [{
+				"pagePath": "pages/main/main",
+				"iconPath": "static/iconfont-home.png",
+				"selectedIconPath": "static/iconfont-home-active.png",
+				"text": "主页"
+			},
+			{
+				"pagePath": "pages/catalog/catalog",
+				"iconPath": "static/iconfont-list.png",
+				"selectedIconPath": "static/iconfont-list-active.png",
+				"text": "项目"
+			},
+			{
+				"pagePath": "pages/order/order",
+				"iconPath": "static/iconfont-cart.png",
+				"selectedIconPath": "static/iconfont-cart-active.png",
+				"text": "我的预订"
+			},
+			{
+				"pagePath": "pages/user/user",
+				"iconPath": "static/iconfont-user.png",
+				"selectedIconPath": "static/iconfont-user-active.png",
+				"text": "个人中心"
+			},
+			{
+				"pagePath": "pages/share/share",
+				"iconPath": "static/share.png",
+				"selectedIconPath": "static/share-active.jpeg",
+				"text": "联系我们"
+			}
+		]
+	},
+	"condition" : { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [
+			{
+				"name": "", //模式名称
+				"path": "", //启动页面，必选
+				"query": "" //启动参数，在页面的onLoad函数里面得到
+			}
+		]
+	}
+}

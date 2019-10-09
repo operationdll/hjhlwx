@@ -1,0 +1,1 @@
+<view class="page"><button data-event-opts="{{[['tap',[['bindCallUser',['$event']]]]]}}" class="btn1" style="margin-top:-250rpx;" bindtap="__e"><image class="btnImg" src="../../static/calluser.png"></image><view>联系客服</view></button><button class="btn1" open-type="contact"><image class="btnImg" src="../../static/weichat.jpg"></image><view>客服微信</view></button></view>

@@ -1,0 +1,104 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*每个页面公共css */
+/*设置按钮颜色*/
+uni-button[type=primary] {
+	background-color: #179B16;
+}
+uni-button[disabled][type=primary] {
+	background-color: rgba(23, 155, 22, .6);
+}
+.button-hover[type=primary] {
+	background-color: #179B16;
+}
+.uni-icon-success {
+	color: #07c160 !important;
+}
+.uni-icon-success_no_circle {
+	color: #07c160;
+}
+

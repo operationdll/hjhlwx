@@ -1,8 +1,0 @@
-
-<!--
-  flag: boolean
--->
-<template name="mask">
-  <view class="mask" hidden="{{flag}}">
-  </view>
-</template>
