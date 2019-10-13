@@ -86,8 +86,9 @@
 						<text class="redStart">*</text>
 						<view class="weui-label">详细地址:</view>
 					</view>
-					<view class="weui-cell__bd">
-						<input class="weui-input" placeholder="请输入" v-model="address" />
+					<view class="weui-cell__bd" style="flex-direction: row;display: flex;">
+						<input class="weui-input" placeholder="请输入" v-model="address" style="width: 320rpx;"/>
+						<text style="color: red;border-bottom: 1px red solid;font-size: 10;" @click="userAddress" v-if="!showDelBnt">本人地址</text>
 					</view>
 				</view>
 			</view>
@@ -341,8 +342,7 @@
 				if (lastname == "") {
 					uni.showToast({
 						title: "请填写用户姓",
-						image: "../../static/info-icon.png",
-						duration: 2000
+						image: "../../static/info-icon.png"
 					});
 					return;
 				}
@@ -351,8 +351,7 @@
 				if (firstname == "") {
 					uni.showToast({
 						title: "请填写用户名",
-						image: "../../static/info-icon.png",
-						duration: 2000
+						image: "../../static/info-icon.png"
 					});
 					return;
 				}
@@ -365,8 +364,7 @@
 				if (phone == "") {
 					uni.showToast({
 						title: "请填写手机号",
-						image: "../../static/info-icon.png",
-						duration: 2000
+						image: "../../static/info-icon.png"
 					});
 					return;
 				}
@@ -377,8 +375,7 @@
 				if (address == "") {
 					uni.showToast({
 						title: "请填写详细地址",
-						image: "../../static/info-icon.png",
-						duration: 2000
+						image: "../../static/info-icon.png"
 					});
 					return;
 				}
@@ -468,14 +465,12 @@
 										}
 										uni.showToast({
 											title: "提交成功",
-											image: "../../static/info-icon.png",
-											duration: 2000
+											image: "../../static/info-icon.png"
 										});
 									} else {
 										uni.showToast({
 											title: "提交失败",
-											image: "../../static/info-icon.png",
-											duration: 2000
+											image: "../../static/info-icon.png"
 										});
 									}
 								}, param);
@@ -484,16 +479,14 @@
 									if (res.statusCode == 400) {
 										uni.showToast({
 											title: "修改失败",
-											image: "../../static/info-icon.png",
-											duration: 2000
+											image: "../../static/info-icon.png"
 										});
 									} else {
 										user.id = param.id;
 										getApp().globalData.users[self.infoUserIndex] = user;
 										uni.showToast({
 											title: "修改成功",
-											image: "../../static/info-icon.png",
-											duration: 2000
+											image: "../../static/info-icon.png"
 										});
 									}
 								}, param);
@@ -510,8 +503,7 @@
 									} else {
 										uni.showToast({
 											title: "提交失败",
-											image: "../../static/info-icon.png",
-											duration: 2000
+											image: "../../static/info-icon.png"
 										});
 									}
 								}, param);
@@ -522,8 +514,7 @@
 									if (res.statusCode == 400) {
 										uni.showToast({
 											title: "修改失败",
-											image: "../../static/info-icon.png",
-											duration: 2000
+											image: "../../static/info-icon.png"
 										});
 									} else {
 										user.id = param.id;
@@ -545,8 +536,7 @@
 				this.setUserInfo(getApp().globalData.users[0]);
 				uni.showToast({
 					title: "添加成功",
-					image: "../../static/info-icon.png",
-					duration: 2000
+					image: "../../static/info-icon.png"
 				});
 			},
 			updateUser: function(user) {
@@ -558,8 +548,7 @@
 				getApp().globalData.users[this.infoUserIndex] = user;
 				uni.showToast({
 					title: "修改成功",
-					image: "../../static/info-icon.png",
-					duration: 2000
+					image: "../../static/info-icon.png"
 				});
 			},
 			bindScareChange: function(e) {
@@ -580,7 +569,7 @@
 					this.showDelBnt = true;
 				} else {
 					this.showDelBnt = true;
-					this.relationship = ["父母亲", "兄弟", "姐妹", "儿女"];
+					this.relationship = ["父母亲", "兄弟", "姐妹", "儿女", "夫妻"];
 					if (e.detail.value != 1) {
 						this.showDelBnt = false;
 					}
@@ -617,20 +606,21 @@
 									self.relationship = ["本人"];
 									uni.showToast({
 										title: "删除成功",
-										image: "../../static/info-icon.png",
-										duration: 2000
+										image: "../../static/info-icon.png"
 									});
 								} else {
 									uni.showToast({
 										title: "删除失败",
-										image: "../../static/info-icon.png",
-										duration: 2000
+										image: "../../static/info-icon.png"
 									});
 								}
 							}, param);
 						}
 					}
 				})
+			},
+			userAddress: function(e) {
+				this.address = getApp().globalData.users[0].address;
 			}
 		}
 	}

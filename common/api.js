@@ -19,12 +19,8 @@ const baseAPI = (url, method, callback, param = {}) => {
 			console.log(res);
 			uni.showToast({
 				title: "请求错误",
-				image: "../../static/info-icon.png",
-				duration: 2000
+				image: "../../static/info-icon.png"
 			});
-		},
-		complete: function() {
-			uni.hideLoading();
 		}
 	});
 }
@@ -50,12 +46,8 @@ const baseXML = (url, method, callback, xml) => {
 			console.log(res);
 			uni.showToast({
 				title: "请求错误",
-				image: "../../static/info-icon.png",
-				duration: 2000
+				image: "../../static/info-icon.png"
 			});
-		},
-		complete: function() {
-			uni.hideLoading();
 		}
 	});
 }

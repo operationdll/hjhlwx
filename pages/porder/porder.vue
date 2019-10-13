@@ -158,7 +158,6 @@
 				this.infoUsers.push(name);
 			  }
 			}
-			console.log(this.regions)
 		},
 		methods: {
 			radioChange: function(index) {
@@ -194,14 +193,13 @@
 					if (timeSpanStr < 180) {
 						uni.showToast({
 							title: "服务需提前3小时预订",
-							image: "../../static/info-icon.png",
-							duration: 2000
+							image: "../../static/info-icon.png"
 						});
 						return;
 					}
 				}
 				let userName = 'aaaa';
-				let url = '/pages/settlement/settlement?region=' + this.regions[this.regionIndex] + '&ycode=' + this.ycode +
+				let url = '/pages/settlement/settlement?region=' + this.regions[this.regionIndex].name + '&ycode=' + this.ycode +
 					'&title=' + this.title + '&total=' + this.total + '&service=' + this.service + '&start=' + this.dateStart +
 					'&time=' + this.time + '&userName=' + userName + '&address=' + this.address;
 				uni.navigateTo({

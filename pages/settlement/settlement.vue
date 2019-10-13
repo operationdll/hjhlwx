@@ -105,8 +105,7 @@
 				        if (res.confirm) {
 				            uni.showToast({
 				                title: "提交成功",
-				            	image:"../../static/info-icon.png",
-				                duration: 2000
+				            	image:"../../static/info-icon.png"
 				            });
 				        } else if (res.cancel) {
 				            console.log('用户点击取消');

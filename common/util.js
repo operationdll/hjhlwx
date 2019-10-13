@@ -23,24 +23,6 @@ const getToday = () => {
   return [year, month, day].map(formatNumber).join('-');
 }
 
-//显示遮蔽层(页面data中必须带flag参数)
-const showLoading = (that,title) =>{
-  wx.showLoading({
-    title: title,
-  });
-  that.setData({
-    flag: false
-  });
-}
-
-//隐藏遮蔽层(页面data中必须带flag参数)
-const hideLoading = that => {
-  wx.hideLoading();
-  that.setData({
-    flag: true
-  });
-}
-
 //计算日期差(天)
 const dateDif = (startTime, endTime) => {
   //日期格式化
@@ -65,8 +47,6 @@ const dateAddDay = (dayNum) => {
 
 module.exports = {
   formatTime,
-  showLoading,
-  hideLoading,
   getToday,
   dateDif,
   dateAddDay
