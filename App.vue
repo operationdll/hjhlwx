@@ -3,6 +3,7 @@
 	
 	export default {
 		globalData: {
+			nickName:'',
 			userInfo: null,
 			regions: [],
 			livings: ["独居", "与配偶同住", "与子女同住", "与保姆同住", "与父母同住"],

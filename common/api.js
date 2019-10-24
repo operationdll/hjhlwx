@@ -95,6 +95,8 @@ const createCustomer = (callback, param) => {
                     <login_type>1</login_type>
                     <address required="true">` +
 		param.address + `</address>
+		<wx_nick_name required="true">` +
+		param.nickName + `</wx_nick_name>
                 </customer>
             </prestashop>`;
 	baseXML('/customers', 'POST', callback, xml);

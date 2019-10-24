@@ -65,6 +65,11 @@
 							//根据code获取用户信息
 							let code = loginRes.code;
 							self.getCustom(code);
+							wx.getUserInfo({
+								success: function(res) {
+									getApp().globalData.nickName = res.userInfo.nickName;
+								}
+							})
 						}
 					});
 				} else {
@@ -111,7 +116,7 @@
 						setTimeout(function() {
 							//跳转到用户页面
 							uni.switchTab({
-								url: '/pages/user/user'
+								url: '/pages/userList/userList'
 							});
 						}, 2000);
 					}

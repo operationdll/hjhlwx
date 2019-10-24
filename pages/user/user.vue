@@ -86,9 +86,8 @@
 						<text class="redStart">*</text>
 						<view class="weui-label">详细地址:</view>
 					</view>
-					<view class="weui-cell__bd" style="flex-direction: row;display: flex;">
-						<input class="weui-input" placeholder="请输入" v-model="address" style="width: 320rpx;"/>
-						<text style="color: red;border-bottom: 1px red solid;font-size: 10;" @click="userAddress" v-if="!showDelBnt">本人地址</text>
+					<view class="weui-cell__bd">
+						<input class="weui-input" placeholder="请输入" v-model="address" />
 					</view>
 				</view>
 			</view>
@@ -186,33 +185,22 @@
 					</view>
 				</view>
 			</view>
-			<view class="weui-cells__title"></view>
-			<view class="weui-cells weui-cells_after-title">
-				<view class="weui-cell" style="display: -webkit-box;display: -webkit-flex;display: flex;">
-					<view class="weui-cell__hd">
-						<text class="redStart">*</text>
-						<view class="weui-label">关系:</view>
-					</view>
-					<view class="weui-cell__bd">
-						<picker @change="bindRelationShipChange" :value="relationshipIndex" :range="relationship">
-							<view class="uni-input">{{relationship[relationshipIndex]}}</view>
-						</picker>
-					</view>
-				</view>
-			</view>
-			<view class="weui-cells__title"></view>
-			<view class="weui-cells weui-cells_after-title">
-				<view class="weui-cell" style="display: -webkit-box;display: -webkit-flex;display: flex;">
-					<view class="weui-cell__hd">
-						<view class="weui-label">信息人:</view>
-					</view>
-					<view class="weui-cell__bd">
-						<picker @change="bindInfoUserChange" :value="infoUserIndex" :range="infoUsers">
-							<view class="uni-input">{{infoUsers[infoUserIndex]}}</view>
-						</picker>
+			<block v-if="infoUserIndex!=0">
+				<view class="weui-cells__title"></view>
+				<view class="weui-cells weui-cells_after-title">
+					<view class="weui-cell" style="display: -webkit-box;display: -webkit-flex;display: flex;">
+						<view class="weui-cell__hd">
+							<text class="redStart">*</text>
+							<view class="weui-label">关系:</view>
+						</view>
+						<view class="weui-cell__bd">
+							<picker @change="bindRelationShipChange" :value="relationshipIndex" :range="relationship">
+								<view class="uni-input">{{relationship[relationshipIndex]}}</view>
+							</picker>
+						</view>
 					</view>
 				</view>
-			</view>
+			</block>
 			<view style="padding: 20rpx 0px;width: 100%;">
 				<button class="weui-btn" type="primary" @click="submitForm">确定</button>
 				<button class="weui-btn" type="warn" @click="deleteUser" v-if="!showDelBnt">删除</button>
@@ -254,7 +242,6 @@
 				firstname: '',
 				occupation: '',
 				address: '',
-				infoUsers: ["本人信息", "新增人员"],
 				infoUserIndex: 0,
 				relationship: ["本人"],
 				relationshipIndex: 0,
@@ -266,22 +253,19 @@
 				showDelBnt: true
 			}
 		},
-		onLoad() {
+		onLoad(options) {
 			self = this;
 			this.ifs = getApp().globalData.ifs.slice();
-			let user = getApp().globalData.users[0];
+			let user = getApp().globalData.users[options.userIndex];
+			if (options.userIndex != 0) {
+				this.relationship = ['父母亲', '兄弟', '姐妹', '儿女', '夫妻'];
+			}
 			this.setUserInfo(user);
-			//判断是否新用户
-			if (getApp().globalData.isNewUser) {
-				this.infoUsers = ["本人信息"];
-			} else {
-				let users = getApp().globalData.users;
-				if (users.length > 2) {
-					for (let i = 2; i < users.length; i++) {
-						let name = users[i].lastname + users[i].firstname;
-						this.infoUsers.push(name);
-					}
-				}
+			this.infoUserIndex = options.userIndex;
+			if (options.userIndex > 1) {
+				this.showDelBnt = false;
+			}else if(options.userIndex==1){
+				this.address = getApp().globalData.users[0].address;
 			}
 		},
 		methods: {
@@ -342,7 +326,8 @@
 				if (lastname == "") {
 					uni.showToast({
 						title: "请填写用户姓",
-						image: "../../static/info-icon.png"
+						image: "../../static/info-icon.png",
+						mask: true
 					});
 					return;
 				}
@@ -351,7 +336,8 @@
 				if (firstname == "") {
 					uni.showToast({
 						title: "请填写用户名",
-						image: "../../static/info-icon.png"
+						image: "../../static/info-icon.png",
+						mask: true
 					});
 					return;
 				}
@@ -364,7 +350,8 @@
 				if (phone == "") {
 					uni.showToast({
 						title: "请填写手机号",
-						image: "../../static/info-icon.png"
+						image: "../../static/info-icon.png",
+						mask: true
 					});
 					return;
 				}
@@ -375,7 +362,8 @@
 				if (address == "") {
 					uni.showToast({
 						title: "请填写详细地址",
-						image: "../../static/info-icon.png"
+						image: "../../static/info-icon.png",
+						mask: true
 					});
 					return;
 				}
@@ -450,45 +438,18 @@
 						param.address = address;
 						param.phone = phone;
 						param.relationship = self.relationship[relationship];
+						param.nickName = getApp().globalData.nickName;
 						//创建/更新 用户
 						if (self.infoUserIndex == 0) {
 							//添加
 							if (param.id == 0) {
 								API.createCustomer(function(res) {
-									if (res.data.customer !== undefined) {
-										user.id = res.data.customer.id;
-										getApp().globalData.users[0] = user;
-										//更新下拉选项
-										if (self.infoUsers.length == 1) {
-											self.infoUsers = ["本人信息", "新增人员"];
-											getApp().globalData.isNewUser = false;
-										}
-										uni.showToast({
-											title: "提交成功",
-											image: "../../static/info-icon.png"
-										});
-									} else {
-										uni.showToast({
-											title: "提交失败",
-											image: "../../static/info-icon.png"
-										});
-									}
+									self.addUser(res.data.customer, user, true);
 								}, param);
 							} else { //修改
 								API.updateUser(function(res) {
-									if (res.statusCode == 400) {
-										uni.showToast({
-											title: "修改失败",
-											image: "../../static/info-icon.png"
-										});
-									} else {
-										user.id = param.id;
-										getApp().globalData.users[self.infoUserIndex] = user;
-										uni.showToast({
-											title: "修改成功",
-											image: "../../static/info-icon.png"
-										});
-									}
+									user.id = param.id;
+									self.updateUser(res, user);
 								}, param);
 							}
 						} else { //创建/更新 亲戚
@@ -496,87 +457,80 @@
 							if (param.id == 0) {
 								param.id = getApp().globalData.users[0].id;
 								API.addCustomer(function(res) {
-									if (res.data.address !== undefined) {
-										user.id = res.data.address.id;
-										let name = lastname + firstname;
-										self.addUser(name, user);
-									} else {
-										uni.showToast({
-											title: "提交失败",
-											image: "../../static/info-icon.png"
-										});
-									}
+									self.addUser(res.data.address, user, false);
 								}, param);
 							} else {
 								param.main = getApp().globalData.users[0].id;
 								//修改
 								API.updateMember(function(res) {
-									if (res.statusCode == 400) {
-										uni.showToast({
-											title: "修改失败",
-											image: "../../static/info-icon.png"
-										});
-									} else {
-										user.id = param.id;
-										self.updateUser(user);
-									}
+									user.id = param.id;
+									self.updateUser(res, user);
 								}, param);
 							}
 						}
 					}
 				});
 			},
-			addUser: function(name, user) {
-				let infoUsers = this.infoUsers;
-				infoUsers.push(name);
-				this.infoUsers = infoUsers;
-				this.infoUserIndex = 0;
-				this.relationship = ["本人"];
-				getApp().globalData.users.push(user);
-				this.setUserInfo(getApp().globalData.users[0]);
-				uni.showToast({
-					title: "添加成功",
-					image: "../../static/info-icon.png"
-				});
+			addUser: function(data, user, isUpdate) {
+				if (data !== undefined) {
+					user.id = data.id;
+					if (isUpdate) {
+						getApp().globalData.users[0] = user;
+						getApp().globalData.isNewUser = false;
+					} else {
+						getApp().globalData.users.push(user);
+					}
+					uni.showToast({
+						title: "添加成功",
+						image: "../../static/info-icon.png",
+						mask: true
+					});
+					setTimeout(function() {
+						uni.switchTab({
+							url: '/pages/userList/userList'
+						});
+					}, 2000);
+				} else {
+					uni.showToast({
+						title: "添加失败",
+						image: "../../static/info-icon.png",
+						mask: true
+					});
+				}
 			},
-			updateUser: function(user) {
-				//添加
-				let name = user.lastname + user.firstname;
-				let infoUsers = this.infoUsers;
-				infoUsers[this.infoUserIndex] = name;
-				this.infoUsers = infoUsers;
-				getApp().globalData.users[this.infoUserIndex] = user;
-				uni.showToast({
-					title: "修改成功",
-					image: "../../static/info-icon.png"
-				});
+			updateUser: function(res, user) {
+				if (res.statusCode == 400) {
+					uni.showToast({
+						title: "修改失败",
+						image: "../../static/info-icon.png",
+						mask: true
+					});
+				} else {
+					getApp().globalData.users[self.infoUserIndex] = user;
+					uni.showToast({
+						title: "修改成功",
+						image: "../../static/info-icon.png",
+						mask: true
+					});
+					setTimeout(function() {
+						uni.switchTab({
+							url: '/pages/userList/userList'
+						});
+					}, 2000);
+				}
 			},
 			bindScareChange: function(e) {
 				if (e.detail.value == 0) {
-					getApp().globalData.users[self.infoUserIndex].ifs = [false, false, false, false, false, false, false, false];
-					getApp().globalData.users[self.infoUserIndex].otherTxt = '';
-					self.setUserInfo(getApp().globalData.users[self.infoUserIndex]);
+					this.ifs.forEach(function(item){
+						item.checked = false;
+					});
+					this.otherTxt = '';
 					this.showIfs = true;
+					this.showOther = true;
 				} else {
 					this.showIfs = false;
 				}
 				this.scareIndex = e.detail.value;
-			},
-			bindInfoUserChange: function(e) {
-				//本人
-				if (e.detail.value == 0) {
-					this.relationship = ["本人"];
-					this.showDelBnt = true;
-				} else {
-					this.showDelBnt = true;
-					this.relationship = ["父母亲", "兄弟", "姐妹", "儿女", "夫妻"];
-					if (e.detail.value != 1) {
-						this.showDelBnt = false;
-					}
-				}
-				let user = getApp().globalData.users[e.detail.value];
-				this.setUserInfo(user);
-				this.infoUserIndex = e.detail.value;
 			},
 			bindRelationShipChange: function(e) {
 				this.relationshipIndex = e.detail.value;
@@ -597,30 +551,27 @@
 							API.deleteUser(function(res) {
 								if (res.statusCode == 200) {
 									getApp().globalData.users.splice(self.infoUserIndex, 1);
-									self.setUserInfo(getApp().globalData.users[0]);
-									let infoUsers = self.infoUsers;
-									infoUsers.splice(self.infoUserIndex, 1);
-									self.infoUsers = infoUsers;
-									self.infoUserIndex = 0;
-									self.showDelBnt = true;
-									self.relationship = ["本人"];
 									uni.showToast({
 										title: "删除成功",
-										image: "../../static/info-icon.png"
+										image: "../../static/info-icon.png",
+										mask: true
 									});
+									setTimeout(function() {
+										uni.switchTab({
+											url: '/pages/userList/userList'
+										});
+									}, 2000);
 								} else {
 									uni.showToast({
 										title: "删除失败",
-										image: "../../static/info-icon.png"
+										image: "../../static/info-icon.png",
+										mask: true
 									});
 								}
 							}, param);
 						}
 					}
 				})
-			},
-			userAddress: function(e) {
-				this.address = getApp().globalData.users[0].address;
 			}
 		}
 	}
