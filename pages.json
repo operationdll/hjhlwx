@@ -30,8 +30,8 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "汇骏护理",
-		"navigationBarBackgroundColor": "white",
-		"backgroundColor": "white",
+		"navigationBarBackgroundColor": "#FFFFFF",
+		"backgroundColor": "#FFFFFF",
 		"backgroundTextStyle": "light"
 	},
 	"tabBar": {

@@ -121,7 +121,7 @@
 							<image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/shangkou.png" class="detail-img" v-else-if='index==1'></image>
 							<image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/jcnr6-1.png" class="detail-img" v-else></image>
 						</block>
-						<view class="content" style="width:230px;">
+						<view class="content" style="width:492rpx;">
 							<view class="v1">
 								<view class="v1-txt">{{item.content}}</view>
 							</view>
