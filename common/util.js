@@ -45,9 +45,18 @@ const dateAddDay = (dayNum) => {
   return [year, month, day].map(formatNumber).join('-');
 }
 
+//判断是否登录
+const isLogin = () => {
+  if(getApp().globalData.nickName==''){
+	  return false;
+  }
+  return true;
+}
+
 module.exports = {
   formatTime,
   getToday,
   dateDif,
-  dateAddDay
+  dateAddDay,
+  isLogin
 }

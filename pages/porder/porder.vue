@@ -24,7 +24,7 @@
 					</view>
 					<view class="weui-cell__bd">
 						<picker @change="bindRegionChange" :value="regionIndex" :range="regions" range-key="name">
-							<view class="uni-input">{{regions[regionIndex].name}}</view>
+							<view class="uni-input">{{regions[regionIndex].name}} ({{currencyConvertor(regions[regionIndex].price)}})</view>
 						</picker>
 					</view>
 				</view>
@@ -49,18 +49,25 @@
 					</view>
 				</view>
 			</view>
-			<view class="weui-cells__title" style="border-bottom: 1rpx solid rgba(0,0,0,.1);">服务价格</view>
+			<view class="weui-cells__title" style="border-bottom: 1rpx solid rgba(0,0,0,.1);">{{selectedCare.hotel_name}}</view>
+			<view class="weui-cells__title" style="border-bottom: 1rpx solid rgba(0,0,0,.1);">{{selectedCare.productItems}}</view>
+			
+			
 			<view class="weui-cells weui-cells_after-title">
-				<radio-group bindchange="radioChange">
-					<label class="weui-cell weui-check__label" v-for="(item, index) in radioItems" v-bind:key="index" @click="radioChange(index)">
-						<view class="weui-cell__bd">{{item.name}}</view>
-						<view class="weui-cell__ft weui-cell__ft_in-radio" v-if="item.checked">
-							<icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
-						</view>
-					</label>
-				</radio-group>
+				<view class="weui-cell">
+					<view class="weui-cell__hd">
+						<view class="weui-label">选择服务:</view>
+					</view>
+					<view class="weui-cell__bd">
+						<picker @change="bindProductChange" :value="productIndex" :range="products" range-key="name">
+							<view class="uni-input">{{products[productIndex].name}} </view>
+						</picker>
+					</view>
+				</view>
 			</view>
-			<block v-if="care!=1">
+						
+			
+			<block v-if="orderType!=1">
 				<view class="weui-cell mycells">
 					<view class="weui-cell__hd">
 						<view class="weui-label">预订日期:</view>
@@ -92,32 +99,23 @@
 </template>
 
 <script>
+	import API from '@/common/api.js';
 	import Util from '@/common/util.js';
-	
+
 	let that;
 	export default {
 		data() {
 			return {
-				care: 0,
+				orderType: 0,
 				flag: true,
-				radioItems: [{
-						name: '500/4小时',
-						value: '0',
-						total: 500,
-						checked: true
-					},
-					{
-						name: '280/2小时',
-						value: '1',
-						total: 280,
-						checked: false
-					}
-				],
 				dateStart: Util.dateAddDay(1),
 				start: Util.dateAddDay(1),
 				end: Util.dateAddDay(31),
 				total: 500,
-				regions: getApp().globalData.regions,
+				regions: [{
+					name: '',
+					price: 0
+				}],
 				regionIndex: 0,
 				ycode: '',
 				title: '',
@@ -125,17 +123,46 @@
 				time: '11:00',
 				titles1: '',
 				titles2: '',
-				infoUsers: ["本人"],
+				infoUsers: [],
 				infoUserIndex: 0,
 				address: '',
-				bntDis: false
+				bntDis: false,
+
+				selectedCare: {
+					id: 11,
+					hotel_name: '基础护理',
+					care: 1,
+					selectedCustomer: {},
+					associations: {
+						products: []
+					}
+				},
+				products: [{name: '', price: 0}],
+				productIndex: 0
+
 			}
 		},
 		onLoad(options) {
 			that = this;
+
+			this.selectedCare = getApp().globalData.selectedService;
+
+
+			// load products
+			this.products = [];
+			for (let product of this.selectedCare.associations.products) {
+				this.products.push({
+					id: product.id,
+					name: product.name,
+					price: product.price,
+					checked: false
+				});
+			}
+
+
 			let titles1 = '当天下单';
 			let titles2 = '当天服务';
-			if (options.care != 1) {
+			if (options.orderType != 1) {
 				titles1 = '预约下单';
 				titles2 = '预订时间服务';
 			} else {
@@ -146,31 +173,38 @@
 				}
 				this.dateStart = Util.getToday();
 			}
-			this.care = options.care;
+			this.orderType = options.orderType;
 			this.title = options.title;
 			this.titles1 = titles1;
 			this.titles2 = titles2;
 			//添加信息人
 			let users = getApp().globalData.users;
-			if (users.length > 2) {
-			  for (let i = 2; i < users.length; i++) {
-				let name = users[i].lastname + users[i].firstname;
-				this.infoUsers.push(name);
-			  }
+			for (let user of users) {
+				this.infoUsers.push(user.lastname + user.firstname);
 			}
+
+			//set default region
+			this.regions = getApp().globalData.regions;
+			this.selectedCare.selectedCustomer = getApp().globalData.users[0];
+			this.regionIndex = this.selectedCare.selectedCustomer.regions;
+
+			this.address = this.selectedCare.selectedCustomer.address;
+
+
 		},
 		methods: {
-			radioChange: function(index) {
-				for (let i = 0; i < this.radioItems.length; i++) {
-					if (index == i) {
-						this.radioItems[i].checked = true;
-					} else {
-						this.radioItems[i].checked = false;
-					}
-				}
+			// radioChange: function(product) {
+			// 	product.checked = !product.checked;
+			// },
+			bindProductChange: function(e){
+				this.productIndex = e.target.value;	
 			},
 			bindInfoUserChange: function(e) {
 				this.infoUserIndex = e.target.value;
+				// 修改服务区域
+				this.regionIndex = getApp().globalData.users[this.infoUserIndex].regions;
+				//修改地址
+				this.address = getApp().globalData.users[this.infoUserIndex].address;
 			},
 			bindRegionChange: function(e) {
 				this.regionIndex = e.target.value;
@@ -183,7 +217,7 @@
 			},
 			submitForm: function() {
 				//当天下单需要判断时间
-				if (this.care == 1) {
+				if (this.orderType == 1) {
 					let date1 = new Date();
 					let date2 = new Date(Util.getToday() + ' ' + this.time);
 					let s1 = date1.getTime(),
@@ -198,13 +232,164 @@
 						return;
 					}
 				}
-				let userName = 'aaaa';
-				let url = '/pages/settlement/settlement?region=' + this.regions[this.regionIndex].name + '&ycode=' + this.ycode +
-					'&title=' + this.title + '&total=' + this.total + '&service=' + this.service + '&start=' + this.dateStart +
-					'&time=' + this.time + '&userName=' + userName + '&address=' + this.address;
-				uni.navigateTo({
-					url: url
-				});
+
+
+				// set selected product
+				let selectedProducts = [];
+				selectedProducts.push(this.products[this.productIndex]);
+				
+				// for (let product of this.products) {
+				// 	if (product.checked === true) {
+				// 		selectedProducts.push(product);
+				// 	}
+				// }
+
+
+				//验证购物车
+				if (selectedProducts.length <= 0) {
+					uni.showToast({
+						title: "请选择服务种类",
+						image: "../../static/info-icon.png"
+					});
+					return;
+				}
+
+				this.createShoppingCart(selectedProducts);
+				
+			},
+
+			currencyConvertor: function(value) {
+				if (!isNaN(value)) {
+					return Number.parseFloat(value).toFixed(2) + '元';
+				}
+			},
+
+			createShoppingCart: function(selectedProducts) {
+
+				// create || update shopping cart
+				let shoppingCart = getApp().globalData.shoppingCart;
+
+				if (shoppingCart.promocode !== this.ycode) {
+					// need reset shopping cart
+					shoppingCart.id = null;
+				}
+
+				if (shoppingCart.id === null) {
+					let shoppingCartDefault = getApp().globalData.shoppingCartDefaultValue;
+					shoppingCart.id_currency = shoppingCartDefault.id_currency;
+					shoppingCart.id_lang = shoppingCartDefault.id_lang;
+					shoppingCart.gift = shoppingCartDefault.gift;
+					shoppingCart.reference = shoppingCartDefault.reference;
+				}
+
+				// set shopping cart data
+				// 1. set main account id
+				let user = getApp().globalData.users[0];
+				shoppingCart.customer = user;
+				if (this.infoUserIndex > 0) {
+					shoppingCart.otherMember = getApp().globalData.users[this.infoUserIndex];
+				}else{
+					shoppingCart.otherMember = user;
+				}
+
+				// 2. set promocode
+				shoppingCart.promocode = this.ycode;
+				// 3. set products
+				shoppingCart.products = selectedProducts;
+				// 4. set service area
+				shoppingCart.global_demand = this.regions[this.regionIndex];
+				// 5. date from - date to
+				shoppingCart.date_from = this.dateStart + ' ' + this.time;
+				shoppingCart.date_to = this.dateStart + ' ' + this.time;
+				// 6. set product items
+				shoppingCart.gift_message = this.selectedCare.productItems.toString();
+				// 7. service address
+				let address = this.address;
+				// set ajax shopping data
+				let param = {
+					id: shoppingCart.id,
+					id_address_delivery: '', //shoppingCart.id_address_delivery,
+					id_address_invoice: '', //shoppingCart.id_address_invoice,
+					id_customer: shoppingCart.customer.id,
+					gift_message: shoppingCart.gift_message,
+					date_from: shoppingCart.date_from,
+					date_to: shoppingCart.date_to,
+					promocode: shoppingCart.promocode,
+					id_global_demand: shoppingCart.global_demand.id,
+					products: shoppingCart.products,
+					id_address_delivery: shoppingCart.otherMember !== null ? shoppingCart.otherMember.id : '',
+					service_address: address
+				};
+				// console.log(param);
+				// create or update shopping cart
+				if (shoppingCart.id === null) {
+					// create
+					API.createShoppingCart((res) => {
+						console.log(res);
+						this.bindData(res, shoppingCart);
+					}, param);
+				} else {
+					// update
+					API.updateShoppingCart((res) => {
+						console.log(res);
+						this.bindData(res, shoppingCart);
+					}, param);
+				}
+			},
+
+			bindData: function(data, shoppingCart) {
+				uni.hideLoading();
+
+				if (data && data.data && data.data.cart && data.data.cart.associations && data.data.cart.associations.cart_summary) {
+					// bind data
+					let total_demand = 0;
+					let discount = 0;
+					let total = 0;
+					for (let cartSummary of data.data.cart.associations.cart_summary) {
+						total_demand += Number(cartSummary.total_demand);
+						discount += Number(cartSummary.total_discounts);
+						total += Number(cartSummary.total_price);
+					}
+
+					if (data.data.cart.id && data.data.cart.id > 0 && total >= 0) {
+						if(this.ycode && this.ycode !== '' && discount <= 0){
+							// promo code invalide
+							shoppingCart.id = null;
+							getApp().globalData.shoppingCart = shoppingCart;
+							
+							uni.showToast({
+								title: "优惠吗无效",
+								image: "../../static/info-icon.png"
+							});
+							return;
+						}else{
+							// update shopping cart id
+							shoppingCart.id = data.data.cart.id;
+							shoppingCart.associations = data.data.cart.associations;
+							getApp().globalData.shoppingCart = shoppingCart;
+							
+							let userName = 'aaaa';
+							let url = '/pages/settlement/settlement?region=' + this.regions[this.regionIndex].name + '&ycode=' + this.ycode +
+								'&title=' + this.title + '&total=' + this.total + '&service=' + this.service + '&start=' + this.dateStart +
+								'&time=' + this.time + '&userName=' + userName + '&address=' + this.address;
+							uni.navigateTo({
+								url: url
+							});
+						}
+					}
+				} else {
+					// update shopping cart id
+					shoppingCart.id = null;
+					getApp().globalData.shoppingCart = shoppingCart;
+					
+					uni.showToast({
+						title: "订单错误请重试",
+						image: "../../static/info-icon.png"
+					});
+					return;
+				}
+
+
 			}
 		}
 	}

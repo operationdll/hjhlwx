@@ -8,6 +8,64 @@
 				</text>
 			</view>
 			<view class="alert">
+				<view class="alert-title">你还未登录</view>
+				<view class="alert-desc">
+					<view class="alert-text userinfo-nickname" style="font-size: 28rpx;">
+						<li>请登录进行操作</li>
+					</view>
+				</view>
+			</view>
+			<view class="bntView">
+				<button type="warn" @click="backHome">
+					取消登录
+				</button>
+				<button type="primary" @click="open">
+					立即登录
+				</button>
+			</view>
+			<uni-popup ref="popup">
+				<view class="userinfo">
+					<image class="userinfo-avatar" mode="cover" src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/logo.png"></image>
+					<text class="userinfo-nickname">
+						汇骏护理
+					</text>
+				</view>
+				<view class="alert">
+					<view class="alert-title">为了获取更好的服务,请确认授权以下信息</view>
+					<view class="alert-desc">
+						<view class="alert-text userinfo-nickname" style="font-size: 28rpx;">
+							<li>获得你的公开信息（昵称、头像等）</li>
+						</view>
+					</view>
+				</view>
+				<view class="bntView">
+					<button type="warn" @click="close" style="width:200rpx">
+						取消
+					</button>
+					<!-- #ifdef MP-WEIXIN -->
+					<button type="primary" open-type="getUserInfo" @getuserinfo="getuserinfo" withCredentials="true" style="width:200rpx">
+						允许
+					</button>
+					<!-- #endif -->
+					<!-- #ifdef APP-PLUS -->
+					<button @click="appWxLogin" type="primary" style="width:200rpx">允许</button>
+					<!-- #endif -->
+					<!-- #ifdef  H5 -->
+					<view style="display: flex;flex: 1;justify-content: center;color: red;">微信登陆暂不支持网页授权</view>
+					<!-- #endif -->
+				</view>
+			</uni-popup>
+		</view>
+	</view>
+	<!-- <view class="login-container">
+		<view>
+			<view class="userinfo">
+				<image class="userinfo-avatar" mode="cover" src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/logo.png"></image>
+				<text class="userinfo-nickname">
+					汇骏护理
+				</text>
+			</view>
+			<view class="alert">
 				<view class="alert-title">请确认授权以下信息</view>
 				<view class="alert-desc">
 					<view class="alert-text userinfo-nickname" style="font-size: 28rpx;">
@@ -15,28 +73,35 @@
 					</view>
 				</view>
 			</view>
-			<!-- #ifdef MP-WEIXIN -->
-			<button type="primary" open-type="getUserInfo" @getuserinfo="getuserinfo" withCredentials="true">
-				确认登录
-			</button>
-			<!-- #endif -->
-			<!-- #ifdef APP-PLUS -->
-			<button @click="appWxLogin" type="primary">确认登录</button>
-			<!-- #endif -->
-			<!-- #ifdef  H5 -->
-			<view style="display: flex;flex: 1;justify-content: center;color: red;">微信登陆暂不支持网页授权</view>
-			<!-- #endif -->
+			<view class="bntView">
+				<button type="warn" @click="backHome">
+					取消登录
+				</button>
+				<!- #ifdef MP-WEIXIN ->
+				<button type="primary" open-type="getUserInfo" @getuserinfo="getuserinfo" withCredentials="true">
+					确认登录
+				</button>
+				<!- #endif ->
+				<!- #ifdef APP-PLUS ->
+				<button @click="appWxLogin" type="primary">确认登录</button>
+				<!- #endif ->
+				<!- #ifdef  H5 ->
+				<view style="display: flex;flex: 1;justify-content: center;color: red;">微信登陆暂不支持网页授权</view>
+				<!- #endif ->
+			</view>
 		</view>
-	</view>
+	</view> -->
 </template>
 
 <script>
 	import API from '@/common/api.js';
 	import Util from '@/common/util.js';
+	import uniPopup from "@/components/uni-popup/uni-popup.vue"
 
 	let self;
 
 	export default {
+		components: {uniPopup},
 		data() {
 			return {
 
@@ -45,18 +110,28 @@
 		onLoad() {
 			self = this;
 			//获取区域信息
-			API.getArea(function(res) {
+			API.getArea((res) => {
 				uni.hideLoading();
 				let regions = res.data.htl_room_type_global_demands;
 				if (regions && regions.length > 0) {
 					getApp().globalData.regions = regions;
 				}
+				//获取主服务和主服务可选时间
+				this.loadMainServices();
 			}, {
 				'display': 'full',
 				'output_format': 'JSON'
 			});
+			
+			
 		},
 		methods: {
+			open(){
+			  this.$refs.popup.open();
+		    },
+			close(){
+			  this.$refs.popup.close();
+			},
 			getuserinfo: function(res) {
 				if (res.detail.iv) {
 					uni.login({
@@ -109,10 +184,6 @@
 							url: '/pages/main/main'
 						});
 					} else {
-						uni.showToast({
-							title: "请先注册用户信息",
-							image: "../../static/info-icon.png"
-						});
 						setTimeout(function() {
 							//跳转到用户页面
 							uni.switchTab({
@@ -282,6 +353,25 @@
 				}
 				user.relationship = relationship;
 				return user;
+			},
+			loadMainServices: function(){
+				//获取主服务和主服务可选时间
+				API.getMainServiceAndAvailableTimeList((res) => {
+					uni.hideLoading();
+					let services = res.data.hotels;
+					if (services && services.length > 0) {
+						getApp().globalData.services = services;
+					}
+				}, {
+					'display': 'full',
+					'output_format': 'JSON'
+				});
+			},
+			backHome: function(){
+				//跳转到主页面
+				uni.switchTab({
+					url: '/pages/main/main'
+				});
 			}
 		}
 	}
@@ -336,5 +426,14 @@
 	.alert-desc {
 		display: block;
 		list-style: disc inside none;
+	}
+	
+	.bntView{
+		display: flex;
+		width: 100%;
+	}
+	
+	button{
+		width: 300rpx;
 	}
 </style>

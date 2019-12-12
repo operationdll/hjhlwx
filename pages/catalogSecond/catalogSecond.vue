@@ -315,20 +315,74 @@
 				flag: true,
 				title: '',
 				care: 1,
+				selectedCareId: 11,
 				products: [],
+
+				// 基础护理
+				care1Service: {
+					id: 11,
+					hotel_name: '基础护理',
+					care: 1
+				},
+				// 临床护理
+				care2Service: {
+					id: 14,
+					hotel_name: '临床护理',
+					care: 2
+				},
+				// 特别护理
+				care3Service: {
+					id: 15,
+					hotel_name: '特别护理',
+					care: 3
+				},
 			}
 		},
 		onLoad(options) {
 			that = this;
+
+			// load service 临时方法
+			
+			let services = getApp().globalData.services;
+			if (services && services.length > 0) {
+				for (let service of services) {
+					if (service.hotel_name === this.care1Service.hotel_name) {
+						this.care1Service = service;
+						
+					} else if (service.hotel_name === this.care2Service.hotel_name) {
+						this.care2Service = service;
+						
+					} else if (service.hotel_name === this.care3Service.hotel_name) {
+						this.care3Service = service;
+						
+					}
+				}
+			}
+
+			this.selectedCareId = getApp().globalData.selectedService.id;
+
+			if (this.selectedCareId === this.care1Service.id) {
+				this.care = 1;
+			} else if (this.selectedCareId === this.care2Service.id) {
+				this.care = 2;
+			} else if (this.selectedCareId === this.care3Service.id) {
+				this.care = 3;
+			}
+
+			this.care = Number(this.care);
+
+			// 临时方法结束
+	
 			let title = '';
 			let products = [];
 			let catalog = {};
-			if ('1' == options.care || '2' == options.care) {
-				if ('1' == options.care) {
+			if (this.care === 1 || this.care === 2 ) {
+				if (this.care === 1) {
 					title = '基础护理';
 					catalog = {
 						value: 1,
 						content: '老人照护(针对失能或半失能老人提供卧床擦浴、洗头等基本生活护理、及日常照护和营养指导、心理疏导、用药指导)',
+						name: '老人照护',
 						checked: false
 					};
 					products.push(catalog);
@@ -337,6 +391,7 @@
 					catalog = {
 						value: 2,
 						content: '病患照护(针对因病患者离开医院回家休养康复提供卧床擦浴、洗头等基本生活护理、及日常照护和营养指导、心理疏导、灵性关怀)',
+						name: '病患照护',
 						checked: false
 					};
 					products.push(catalog);
@@ -344,38 +399,44 @@
 				catalog = {
 					value: 3,
 					content: '晚晴关怀(生活护理与指导;心理疏导;专业护理和指导;疼痛护理和指导;灵性关怀)',
+					name: '晚晴关怀',
 					checked: false
 				};
 				products.push(catalog);
 				catalog = {
 					value: 4,
 					content: '陪诊陪护(全程陪诊、协助挂号、取药、帮组梳理病情、给予用药指导)',
+					name: '陪诊陪护',
 					checked: false
 				};
 				products.push(catalog);
 				catalog = {
 					value: 5,
 					content: '康复护理(协助功能锻炼、肢体康复按摩)',
+					name: '康复护理',
 					checked: false
 				};
 				products.push(catalog);
 				catalog = {
 					value: 6,
 					content: '慢病管理(高血压、糖尿病、肺心病等患者生命体征测量和记录，整理常规用药及并发症的预防指导)',
+					name: '慢病管理',
 					checked: true
 				};
 				products.push(catalog);
-			} else if ('3' == options.care) {
+			} else if (this.care === 3) {
 				title = '特别护理';
 				catalog = {
 					value: 8,
 					content: '压疮护理(压仓的风险预防、分级评估;初期压疮的护理、换药及局部皮肤的按摩)',
+					name: '压疮护理',
 					checked: false
 				};
 				products.push(catalog);
 				catalog = {
 					value: 9,
 					content: '伤口换药(上门观察伤口情況, 作相应处理; 保持创面清洁, 清除伤口異物, 保持和防止伤口受损和外來感染。促进组织生长伤口愈合)',
+					name: '伤口换药',
 					checked: false
 				};
 				products.push(catalog);
@@ -383,13 +444,14 @@
 			catalog = {
 				value: 7,
 				content: '健康规划(个性化护理记录，检测健康进度，提供健康规划指导)',
+				name: '健康规划',
 				checked: true
 			};
 			products.push(catalog);
 
 			this.title = title;
 			this.products = products;
-			this.care = options.care;
+			//this.care = options.care;
 		},
 		methods: {
 			productChange: function(index) {
@@ -407,13 +469,22 @@
 					}
 				}
 			},
-			bindCareTap: function (event) {
-			    //选中的按钮
-			    let careDate = event.currentTarget.dataset.care;
-			    wx.navigateTo({
-			      url: '/pages/porder/porder?care=' + careDate + '&title=' + this.title
-			    });
-			  }
+			bindCareTap: function(event) {
+				//选中的按钮
+				let careDate = event.currentTarget.dataset.care;
+				let selectedProductItems = [];
+				for(let product of this.products){
+					if(product.checked === true){
+						selectedProductItems.push(product.name);
+					}
+				}
+				
+				getApp().globalData.selectedService.productItems = selectedProductItems;
+				
+				wx.navigateTo({
+					url: '/pages/porder/porder?orderType=' + careDate
+				});
+			}
 		}
 	}
 </script>

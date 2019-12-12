@@ -11,9 +11,13 @@ const baseAPI = (url, method, callback, param = {}) => {
 	uni.request({
 		url: API_URL + url + "?output_format=JSON" + "&ws_key=" + KEY,
 		method: method,
+		sslVerify: false,
 		data: param,
 		success: (res) => {
-			callback(res);
+			if (callback) {
+				callback(res);
+			}
+
 		},
 		fail: function(res) {
 			console.log(res);
@@ -36,6 +40,7 @@ const baseXML = (url, method, callback, xml) => {
 		url: API_URL + url + "?output_format=JSON" + "&ws_key=" + KEY,
 		method: method,
 		data: xml,
+		sslVerify: false,
 		header: {
 			'content-type': 'text/xml'
 		},
@@ -153,6 +158,11 @@ const getArea = (callback, param) => {
 	baseAPI('/global_demand', 'GET', callback, param);
 }
 
+//获取主服务和主服务可选时间
+const getMainServiceAndAvailableTimeList = (callback, param) => {
+	baseAPI('/hotels', 'GET', callback, param);
+}
+
 //删除亲属信息
 const deleteUser = (callback, param) => {
 	baseAPI('/addresses/' + param.id, 'DELETE', callback);
@@ -247,6 +257,175 @@ const updateMember = (callback, param) => {
 	baseXML('/addresses', 'PUT', callback, xml);
 }
 
+
+
+// 新建购物车
+const createShoppingCart = (callback, param) => {
+	let xml =
+		`<?xml version="1.0" encoding="UTF-8"?>
+		<prestashop xmlns:xlink="http://www.w3.org/1999/xlink">
+			<cart>
+				<!--亲属账户ID 如果选择主账户为服务对象则留空-->
+				<id_address_delivery format="isUnsignedId">` +
+		param.id_address_delivery +
+		`</id_address_delivery>
+				<!--亲属账户ID 如果选择主账户为服务对象则留空-->
+				<id_address_invoice format="isUnsignedId">` + param.id_address_invoice +
+		`</id_address_invoice>
+				<id_currency required="true" format="isUnsignedId">1</id_currency>
+				<!--主账户ID-->
+				<id_customer format="isUnsignedId">` +
+		param.id_customer +
+		`</id_customer>
+				<id_lang required="true" format="isUnsignedId">3</id_lang>
+				<gift format="isBool">1</gift>
+				<!--具体产品信息 字符串-->
+				<gift_message format="isMessage">` +
+		param.gift_message + `</gift_message>
+				<!--服务时间 yyyy-mm-dd -->
+				<date_from format="isDate" required="true">` +
+		param.date_from + `</date_from>
+				<delivery_option format="string" required="true">` +
+						param.date_from + `</delivery_option>
+				<date_to format="isDate" required="true">` + param.date_to +
+		`</date_to>
+				<reference format="int" required="true">1</reference>
+				<promocode format="string" >` + param.promocode +
+		`</promocode>
+				<id_global_demand>` + param.id_global_demand +
+		`</id_global_demand>
+				<service_address>` 
+				+ param.service_address +
+			   `</service_address>
+				<associations>
+					<cart_rows nodeType="cart_row" virtualEntity="true">
+						`;
+
+	for (let product of param.products) {
+		xml +=
+			`
+					<cart_row>
+						<!--产品ID-->
+						<id_product xlink:href="http://icare.easyiservice.com/api/products/" required="true">` +
+			product.id +
+			`</id_product>
+						<!--留空-->
+						<id_product_attribute xlink:href="http://icare.easyiservice.com/api/combinations/" required="true"></id_product_attribute>
+						<!--留空-->
+						<id_address_delivery xlink:href="http://icare.easyiservice.com/api/addresses/" required="true"></id_address_delivery>
+						<!--预订服务数量 最少为1  最终数量 = 预订天数 x 预订服务数量-->
+						<quantity>1</quantity>
+					</cart_row>
+		`;
+	}
+
+
+	xml += `		</cart_rows>
+				</associations>
+			</cart>
+		</prestashop>`;
+
+	baseXML('/carts', 'POST', callback, xml);
+}
+
+
+// 更新购物车
+const updateShoppingCart = (callback, param) => {
+	let xml =
+		`<?xml version="1.0" encoding="UTF-8"?>
+		<prestashop xmlns:xlink="http://www.w3.org/1999/xlink">
+			<cart>
+			    <!--购物车ID-->
+			    <id format="isUnsignedId">`+ param.id +`</id>
+				<!--亲属账户ID 如果选择主账户为服务对象则留空-->
+				<id_address_delivery format="isUnsignedId">` +
+		param.id_address_delivery +
+		`</id_address_delivery>
+				<!--亲属账户ID 如果选择主账户为服务对象则留空-->
+				<id_address_invoice format="isUnsignedId">` + param.id_address_invoice +
+		`</id_address_invoice>
+				<id_currency required="true" format="isUnsignedId">1</id_currency>
+				<!--主账户ID-->
+				<id_customer format="isUnsignedId">` +
+		param.id_customer +
+		`</id_customer>
+				<id_lang required="true" format="isUnsignedId">3</id_lang>
+				<gift format="isBool">1</gift>
+				<!--具体产品信息 字符串-->
+				<gift_message format="isMessage">` +
+		param.gift_message + `</gift_message>
+				<!--服务时间 yyyy-mm-dd -->
+				<date_from format="isDate" required="true">` +
+		param.date_from + `</date_from>
+				<date_to format="isDate" required="true">` + param.date_to +
+		`</date_to>
+				<reference format="int" required="true">1</reference>
+				<promocode format="string" >` + param.promocode +
+		`</promocode>
+				<id_global_demand>` + param.id_global_demand +
+		`</id_global_demand>
+				<service_address>`
+								+ param.service_address +
+			   `</service_address>
+				<associations>
+					<cart_rows nodeType="cart_row" virtualEntity="true">
+						`;
+
+	for (let product of param.products) {
+		xml +=
+			`
+					<cart_row>
+						<!--产品ID-->
+						<id_product xlink:href="http://icare.easyiservice.com/api/products/" required="true">` +
+			product.id +
+			`</id_product>
+						<!--留空-->
+						<id_product_attribute xlink:href="http://icare.easyiservice.com/api/combinations/" required="true"></id_product_attribute>
+						<!--留空-->
+						<id_address_delivery xlink:href="http://icare.easyiservice.com/api/addresses/" required="true"></id_address_delivery>
+						<!--预订服务数量 最少为1  最终数量 = 预订天数 x 预订服务数量-->
+						<quantity>1</quantity>
+					</cart_row>
+		`;
+	}
+
+
+	xml += `		</cart_rows>
+				</associations>
+			</cart>
+		</prestashop>`;
+
+	baseXML('/carts', 'PUT', callback, xml);
+}
+
+
+// create order
+const createOrder = (callback, param) => {
+	let xml =
+		`<?xml version="1.0" encoding="UTF-8"?>
+		<prestashop xmlns:xlink="http://www.w3.org/1999/xlink">
+			<order>
+				<id_cart required="true" format="isUnsignedId">`+ param.id_cart +`</id_cart>
+				<id_currency required="true" format="isUnsignedId">1</id_currency>
+				<id_lang required="true" format="isUnsignedId">3</id_lang>
+				<id_customer required="true" format="isUnsignedId">`+ param.id_customer +`</id_customer>
+				<id_carrier required="true" format="isUnsignedId">0</id_carrier>
+				<module required="true" format="isModuleName">wx</module>
+				<payment required="true">`+ param.wx_code +`</payment>
+				<total_paid required="true" format="isPrice">`+ param.total_paid +`</total_paid>
+				<total_paid_real required="true" format="isPrice">`+ param.total_paid_real +`</total_paid_real>
+			</order>
+		</prestashop>`;
+	baseXML('/orders', 'POST', callback, xml);
+}
+
+
+// get order by main customer id
+const getOrderList = (callback, param) => {
+	baseAPI('/orders', 'GET', callback, param);
+}
+
+
 module.exports = {
 	getCustomer,
 	createCustomer,
@@ -254,5 +433,10 @@ module.exports = {
 	addCustomer,
 	deleteUser,
 	updateUser,
-	updateMember
+	updateMember,
+	getMainServiceAndAvailableTimeList,
+	createShoppingCart,
+	updateShoppingCart,
+	createOrder,
+	getOrderList
 }

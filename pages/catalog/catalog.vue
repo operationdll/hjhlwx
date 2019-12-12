@@ -6,7 +6,7 @@
 					<image src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/topimg.jpg" style="width:100%;height: 380rpx;" />
 				</view>
 				<view class="weui-panel__bd">
-					<view @click="bindCareTap($event)" data-care="1">
+					<view @click="bindCareTap(care1Service)" data-care="1">
 						<view class="title-content">
 							<view class="title-line"></view>
 							<image class="title-img" src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/care1.png" />
@@ -33,7 +33,7 @@
 							</view>
 						</view>
 					</view>
-					<view @click="bindCareTap($event)" data-care="2">
+					<view @click="bindCareTap(care2Service)" data-care="2">
 						<view class="title-content">
 							<view class="title-line"></view>
 							<image class="title-img" src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/care2.png" />
@@ -60,7 +60,7 @@
 							</view>
 						</view>
 					</view>
-					<view @click="bindCareTap($event)" data-care="3">
+					<view @click="bindCareTap(care3Service)" data-care="3">
 						<view class="title-content">
 							<view class="title-line" style="margin-bottom:-4rpx;"></view>
 							<image class="title-img" src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/care3.png" />
@@ -88,103 +88,137 @@
 </template>
 
 <script>
+	import Util from '@/common/util.js';
+	
 	export default {
 		data() {
 			return {
-
+				// 基础护理
+				care1Service: {id : 11, hotel_name : '基础护理'},
+				// 临床护理
+				care2Service: {id : 14, hotel_name : '临床护理'},
+				// 特别护理
+				care3Service: {id : 15, hotel_name : '特别护理'},
+			}
+		},
+		onLoad() {
+			//判断是否登录
+			if(!Util.isLogin()){
+				uni.redirectTo({
+					url: '/pages/index/index'
+				});
+				return;
+			}
+			
+			self = this;
+			//绑定主服务
+			let services = getApp().globalData.services;
+			if (services && services.length > 0) {
+				for (let service of services) {
+					if (service.hotel_name === this.care1Service.hotel_name) {
+						this.care1Service = service;
+					} else if (service.hotel_name === this.care2Service.hotel_name) {
+						this.care2Service = service;
+					} else if (service.hotel_name === this.care3Service.hotel_name) {
+						this.care3Service = service;
+					}
+				}
 			}
 		},
 		methods: {
 			//事件处理函数
-			  bindCareTap: function (event) {
-			    //选中的按钮
-			    let careDate = event.currentTarget.dataset.care;
+			bindCareTap: function(selectedService) {
+				//选中的按钮
+				// let careDate = event.currentTarget.dataset.care;
+				// set current selected service
+				getApp().globalData.selectedService = selectedService;
+				
 				uni.navigateTo({
-					url: '/pages/catalogSecond/catalogSecond?care=' + careDate
+					url: '/pages/catalogSecond/catalogSecond'
 				});
-			  }
+			}
 		}
 	}
 </script>
 
 <style>
-.weui-panel__hd:after {
-  border-bottom: 0px;
-}
+	.weui-panel__hd:after {
+		border-bottom: 0px;
+	}
 
-.title-img{
-  width:220rpx;
-  height:220rpx;
-}
+	.title-img {
+		width: 220rpx;
+		height: 220rpx;
+	}
 
-.title-content{
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  align-items: flex-end;
-  justify-content: center;
-}
+	.title-content {
+		display: flex;
+		width: 100%;
+		flex-direction: row;
+		align-items: flex-end;
+		justify-content: center;
+	}
 
-.title-line{
-  display: block;
-  width: 240rpx;
-  height: 18rpx;
-  margin-bottom: 6rpx;
-  background-repeat:repeat-y;
-  background-size:100% 100%;
-  -moz-background-size:100% 100%;
-  background-image: url('https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/ling.jpeg');
-}
+	.title-line {
+		display: block;
+		width: 240rpx;
+		height: 18rpx;
+		margin-bottom: 6rpx;
+		background-repeat: repeat-y;
+		background-size: 100% 100%;
+		-moz-background-size: 100% 100%;
+		background-image: url('https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/ling.jpeg');
+	}
 
-.weui-media-box:before{
-  border: 0px;
-}
+	.weui-media-box:before {
+		border: 0px;
+	}
 
-.content{
-  padding: 0rpx 50rpx;
-  font-size: 30rpx;
-  display: flex;
-  flex-direction: column;
-}
+	.content {
+		padding: 0rpx 50rpx;
+		font-size: 30rpx;
+		display: flex;
+		flex-direction: column;
+	}
 
-.content-title {
-  padding: 0rpx 0rpx;
-  font-size: 18rpx;
-  display: flex;
-  flex-direction: row;
-  margin-top: 16rpx;
-  align-items: flex-end;
+	.content-title {
+		padding: 0rpx 0rpx;
+		font-size: 18rpx;
+		display: flex;
+		flex-direction: row;
+		margin-top: 16rpx;
+		align-items: flex-end;
 
-}
+	}
 
-.content-img{
-  width: 360rpx;
-  height: 100rpx;
-  margin-left: -20rpx;
-}
+	.content-img {
+		width: 360rpx;
+		height: 100rpx;
+		margin-left: -20rpx;
+	}
 
-.content-txt{
-  margin-bottom: 20rpx;
-}
+	.content-txt {
+		margin-bottom: 20rpx;
+	}
 
-.detail{
-  background: rgb(241, 241, 241);
-  border-radius: 10rpx;      
-  -moz-border-radius: 10rpx; 
-  -webkit-border-radius: 10rpx;
-  display: flex;
-  flex-direction: column;
-}
+	.detail {
+		background: rgb(241, 241, 241);
+		border-radius: 10rpx;
+		-moz-border-radius: 10rpx;
+		-webkit-border-radius: 10rpx;
+		display: flex;
+		flex-direction: column;
+	}
 
-.detail-row1{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  padding: 20rpx 0rpx;
-}
+	.detail-row1 {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		padding: 20rpx 0rpx;
+	}
 
-.detail-img{
-  width:120rpx;
-  height: 120rpx;
-}
+	.detail-img {
+		width: 120rpx;
+		height: 120rpx;
+	}
 </style>

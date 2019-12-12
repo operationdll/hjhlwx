@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+    <head>
+        <meta charset="UTF-8" />
+        <script>
+            var coverSupport = 'CSS' in window && typeof CSS.supports === 'function' && (CSS.supports('top: env(a)') ||
+                CSS.supports('top: constant(a)'))
+            document.write(
+                '<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0' +
+                (coverSupport ? ', viewport-fit=cover' : '') + '" />')
+        </script>
+        <title>View</title>
+        <style>
+            * {
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            input[type="search"i]::-webkit-search-cancel-button {
+                display: none;
+            }
+        </style>
+        <script>
+            var __wxConfig = {"debug":false,"appname":"汇骏护理","entryPagePath":"pages/index/index.html","page":{"pages/index/index.html":{"window":{"usingComponents":{}}},"pages/main/main.html":{"window":{"usingComponents":{}}},"pages/catalog/catalog.html":{"window":{"usingComponents":{}}},"pages/order/order.html":{"window":{"usingComponents":{}}},"pages/user/user.html":{"window":{"usingComponents":{}}},"pages/share/share.html":{"window":{"usingComponents":{"uni-popup":"/components/uni-popup/uni-popup"}}},"pages/settlement/settlement.html":{"window":{"usingComponents":{}}},"pages/catalogSecond/catalogSecond.html":{"window":{"usingComponents":{}}},"pages/porder/porder.html":{"window":{"usingComponents":{}}}},"global":{"window":{"navigationBarTextStyle":"black","navigationBarTitleText":"汇骏护理","navigationBarBackgroundColor":"white","backgroundColor":"white"}},"tabBar":{"color":"#999999","selectedColor":"#07c160","backgroundColor":"#F8F8F8","borderStyle":"black","list":[{"pagePath":"pages/main/main.html","iconPath":"static/iconfont-home.png","selectedIconPath":"static/iconfont-home-active.png","text":"主页"},{"pagePath":"pages/catalog/catalog.html","iconPath":"static/iconfont-list.png","selectedIconPath":"static/iconfont-list-active.png","text":"项目"},{"pagePath":"pages/order/order.html","iconPath":"static/iconfont-cart.png","selectedIconPath":"static/iconfont-cart-active.png","text":"我的预订"},{"pagePath":"pages/user/user.html","iconPath":"static/iconfont-user.png","selectedIconPath":"static/iconfont-user-active.png","text":"个人中心"},{"pagePath":"pages/share/share.html","iconPath":"static/share.png","selectedIconPath":"static/share-active.jpeg","text":"联系我们"}],"position":"bottom"},"networkTimeout":{"request":60000,"connectSocket":60000,"uploadFile":60000,"downloadFile":60000},"platform":"devtools","pages":["pages/index/index","pages/main/main","pages/catalog/catalog","pages/order/order","pages/user/user","pages/share/share","pages/settlement/settlement","pages/catalogSecond/catalogSecond","pages/porder/porder"],"nvueCompiler":"uni-app","renderer":"auto","splashscreen":{"alwaysShowBeforeRender":true,"autoclose":false},"compilerVersion":"2.3.3","usingComponents":{}}
+        </script>
+        <script>
+            var __id__ = '';
+            window.__dispatchGenerateFunc__ = function(page) {
+                __id__ = page;
+                document.title = page;
+                // window.history.pushState('', '', page);
+                var wxss = page.replace('.html', '.wxss')
+                if (
+                    typeof __wxAppCode__ !== 'undefined' &&
+                    __wxAppCode__.hasOwnProperty(wxss)
+                ) {
+                    var setCssToHead = __wxAppCode__[wxss]
+                    typeof setCssToHead === 'function' && setCssToHead()
+                    document.dispatchEvent(new CustomEvent("generateFuncReady", {
+                        detail: {
+                            generateFunc: $gwx(page.replace('.html', '.wxml'))
+                        }
+                    }));
+                } else {
+                    plus.webview.currentWebview().setJsFile('_www/' + page.replace('.html', '.js'));
+                }
+            };
+        </script>
+        <script src="__uniappes6.js"></script>
+        <script src="uniapp://ready"></script>
+    </head>
+
+    <body>
+        <div></div>
+    </body>
+
+</html>

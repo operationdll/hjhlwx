@@ -1,47 +1,142 @@
 <template>
 	<view class="section">
 		<view class="section__title weui-panel__hd">我的预定</view>
-		<view class="weui-media-box weui-media-box_appmsg" @click="submitForm">
+		<view class="weui-media-box weui-media-box_appmsg" v-for="(item, index) in orderList" v-bind:key="index" @click="showOrderDetail(item)">
 			<view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
 				<image class="weui-media-box__thumb" src="../../static/order.png" />
 			</view>
 			<view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
 				<view class="weui-media-box__title title-state">
-					<view>老人护理</view>
-					<view style="color:red">已完成</view>
+
+					<view>{{item.orderName}}</view>
 				</view>
-				<view class="weui-media-box__desc" style="color:#179B16;">预订日期：2019-10-10 时间:14:20</view>
-			</view>
-		</view>
-		<view class="weui-media-box weui-media-box_appmsg" @click="submitForm">
-			<view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
-				<image class="weui-media-box__thumb" src="../../static/order.png" />
-			</view>
-			<view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-				<view class="weui-media-box__title title-state">
-					<view>晚晴关怀</view>
-					<view style="color:red">已完成</view>
+
+				<view class="weui-media-box__desc">
+					{{item.gift_message}}
 				</view>
-				<view class="weui-media-box__desc" style="color:#179B16;">预订日期：2019-10-19 时间:15:00</view>
+				<view class="weui-media-box__desc" style="color:#179B16;">
+					预订日期：{{item.source}}
+				</view>
+				<view style="color:red">{{item.orderStateName}}</view>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import API from '@/common/api.js';
+	import Util from '@/common/util.js';
+
+
 	export default {
 		data() {
 			return {
-
+				// orderList: [{
+				// 	id: 0,
+				// 	orderStateName: '',
+				// 	reference: '',
+				// 	date_upd: '',
+				// 	gift_message: '',
+				// 	associations: {
+				// 		order_rows: [{
+				// 			id: '',
+				// 			product_name: ''
+				// 		}],
+				// 	},
+				// 	orderName: ''
+				// }],
+				orderList: [],
+				services: [],
+				orderStates: [],
+				currentUser: {}
 			}
 		},
-		methods: {
-			submitForm: function(event) {
-				let url =
-					'/pages/settlement/settlement?region=盐田区&ycode=sddf&title=晚晴关怀&total=500&service=4小时&butBol=false&start=2019-10-19&time=15:00&userName=李四&address=地址2';
-				uni.navigateTo({
-					url: url
+		onLoad(options) {
+			
+		},
+		onShow() {
+			//判断是否登录
+			if(!Util.isLogin()){
+				uni.redirectTo({
+					url: '/pages/index/index'
 				});
+				return;
+			}
+			
+			this.currentUser = getApp().globalData.users[0];
+			//绑定主服务
+			this.services = getApp().globalData.services;
+			// bind order states
+			this.orderStates = getApp().globalData.orderStates;
+			//绑定数据
+			this.bindData();
+			//取消消息信息
+			// wx.hideTabBarRedDot({
+			// 	index: 2
+			// });
+		},
+		methods: {
+			showOrderDetail: function(orderItem) {
+				// set selected order item
+				getApp().globalData.selectedOrderItem = orderItem;
+				// jump to next page
+				uni.navigateTo({
+					url: '/pages/order/orderDetail'
+				});
+			},
+			bindData: function() {
+				API.getOrderList((response) => {
+					uni.hideLoading();
+					if(response.data.orders!=undefined){
+						this.orderList = response.data.orders;
+						for (let orderItem of this.orderList) {
+							orderItem.orderName = this.getProductName(orderItem);
+							orderItem.orderStateName = this.getOrderStateName(orderItem);
+							if (!orderItem.source) {
+								orderItem.source = '';
+							}
+						}
+					}
+				}, {
+					'display': 'full',
+					'filter[id_customer]': '[' + this.currentUser.id + ']',
+					'sort': '[id_DESC]'
+				});
+			},
+			getProductName: function(orderItem) {
+				let productName = '';
+				if (orderItem && orderItem.id > 0 && orderItem.associations && orderItem.associations.order_rows) {
+					for (let orderProduct of orderItem.associations.order_rows) {
+						for (let service of this.services) {
+							for (let product of service.associations.products) {
+								if (Number(orderProduct.product_id) === Number(product.id)) {
+									productName += service.hotel_name;
+									break;
+								}
+							}
+							if (productName) {
+								break;
+							}
+						}
+
+						// if not find right name then replace to order name
+						if (!productName) {
+							productName += orderProduct.product_name;
+							break;
+						}
+					}
+				}
+				return productName;
+			},
+			getOrderStateName: function(orderItem) {
+				let stateName = this.orderStates[0].name;
+				for (let state of this.orderStates) {
+					if (Number(orderItem.current_state) === state.id) {
+						stateName = state.name;
+						break;
+					}
+				}
+				return stateName;
 			}
 		}
 	}

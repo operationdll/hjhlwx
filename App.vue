@@ -1,9 +1,11 @@
 <script>
 	import Util from '@/common/util.js';
-	
+
 	export default {
 		globalData: {
-			nickName:'',
+			appId: 'wx29f4f1fbbae60fd8',
+			wx_pay_key: '12Rw98f08vL28Id76SZ88hj52Y36H4jk',
+			nickName: '',
 			userInfo: null,
 			regions: [],
 			livings: ["独居", "与配偶同住", "与子女同住", "与保姆同住", "与父母同住"],
@@ -61,30 +63,119 @@
 				ifs: [false, false, false, false, false, false, false, false],
 				otherTxt: '',
 				relationship: 0
-			}, {
+			}],
+			services: [],
+			selectedService: {},
+			shoppingCart: {
+				id: null,
+				id_address_delivery: '',
+				id_address_invoice: '',
+				id_currency: 1,
+				customer: null,
+				otherMember: null,
+				id_lang: 3,
+				gift: 1,
+				gift_message: '',
+				date_from: '',
+				date_to: '',
+				reference: 1,
+				promocode: '',
+				global_demand: '',
+
+				products: []
+			},
+			shoppingCartDefaultValue: {
+				id_currency: 1,
+				id_lang: 3,
+				gift: 1,
+				reference: 1
+			},
+			selectedOrderItem: {
 				id: 0,
-				lastname: '',
-				firstname: '',
-				sexes: 0,
-				birthDate: Util.getToday(),
-				phone: '',
-				regions: 0,
-				address: '',
-				occupation: '',
-				livings: 0,
-				flats: 0,
-				diseases: 0,
-				scares: 0,
-				ifs: [false, false, false, false, false, false, false, false],
-				otherTxt: '',
-				relationship: 0
-			}]
+				orderStateName: '',
+				reference: '',
+				date_upd: '',
+				gift_message: '',
+				associations: {
+					order_rows: [{
+						id: '',
+						product_name: ''
+					}],
+				},
+				orderName: ''
+			},
+			orderStates: [{
+					id: 0,
+					name: '等待处理'
+				},
+				{
+					id: 1,
+					name: '开始服务'
+				},
+				{
+					id: 2,
+					name: '订单受理'
+				},
+				{
+					id: 3,
+					name: '派单中'
+				},
+				{
+					id: 4,
+					name: '服务进行中'
+				},
+				{
+					id: 5,
+					name: '服务完结'
+				},
+				{
+					id: 6,
+					name: '订单未能受理'
+				},
+				{
+					id: 7,
+					name: '产品退货'
+				},
+				{
+					id: 8,
+					name: '付款错误'
+				},
+				{
+					id: 9,
+					name: '继续跟进'
+				},
+				{
+					id: 10,
+					name: '等待银行电汇付款'
+				},
+				{
+					id: 11,
+					name: '等待PayPal付款'
+				},
+				{
+					id: 12,
+					name: '指派医护人员出发'
+				},
+				{
+					id: 13,
+					name: '延期交货（未付款）'
+				},
+				{
+					id: 14,
+					name: '成功接收支付'
+				},
+
+			]
 		},
 		onLaunch: function() {
 			// console.log('App Launch')
 		},
 		onShow: function() {
 			// console.log('App Show')
+			//显示消息提示
+			// wx.showTabBarRedDot({
+			// 	index: 2
+			// });
 		},
 		onHide: function() {
 			// console.log('App Hide')

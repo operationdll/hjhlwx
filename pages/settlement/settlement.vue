@@ -2,7 +2,7 @@
 	<view class="text">
 		<view class="gbmask">
 			<view class="content">
-				<view class="brand">{{title}}</view>
+				<view class="brand">{{selectedCare.hotel_name}}</view>
 				<view class="intro">
 					<text>护理人:</text>
 					<text>{{userName}}</text>
@@ -12,12 +12,12 @@
 					<text>{{region}}</text>
 				</view>
 				<view class="intro">
-					<text>服务地址:</text>
+					<text style="width: 300rpx;">服务地址:</text>
 					<text>{{address}}</text>
 				</view>
 				<view class="intro">
 					<text>区域附加费:</text>
-					<text>50元</text>
+					<text>{{total_demand}}</text>
 				</view>
 				<view class="intro">
 					<text>优惠码:</text>
@@ -32,12 +32,8 @@
 					<text>{{service}}</text>
 				</view>
 				<view class="intro">
-					<text>预订日期:</text>
-					<text>{{start}}</text>
-				</view>
-				<view class="intro">
 					<text>预订时间:</text>
-					<text>{{time}}</text>
+					<text>{{start}}</text>
 				</view>
 				<view class="intro">
 					<text>总金额:</text>
@@ -55,6 +51,11 @@
 </template>
 
 <script>
+	import API from '@/common/api.js';
+	import Util from '@/common/util.js';
+	import cj from '../../node_modules/crypto-js/crypto-js.js'
+
+
 	let that;
 	export default {
 		data() {
@@ -64,13 +65,16 @@
 				start: '',
 				title: '',
 				flag: true,
-				total: '',
+				total: 0,
 				discount: 0,
 				service: '',
-				butBol: true,
-				time: '',
+				butBol: false,
 				userName: '',
 				address: '',
+				total_demand: 0,
+				selectedCare: {
+					hotel_name: ''
+				}
 			}
 		},
 		onLoad: function(options) {
@@ -78,40 +82,178 @@
 			if (undefined != options.butBol) {
 				that.butBol = false;
 			}
-			let discount = 0;
-			if (options.ycode != '') {
-				discount = 50;
-			}
-			let total = Number(options.total);
-			total = total + 50 - discount;
-			that.start = options.start;
 			that.region = options.region;
 			that.ycode = options.ycode;
 			that.title = options.title;
-			that.total = total;
-			that.discount = discount;
-			that.service = options.service;
-			that.time = options.time;
-			that.userName = options.userName;
 			that.address = options.address;
+
+			this.selectedCare = getApp().globalData.selectedService;
+			// get saved shopping cart
+			let shoppingCart = getApp().globalData.shoppingCart;
+
+			// show data
+			that.start = shoppingCart.date_from;
+			this.service = '';
+			for(let product of shoppingCart.products){
+				this.service += ' ' + product.name;
+			}
+			
+			this.userName = shoppingCart.otherMember.lastname + ' ' + shoppingCart.otherMember.firstname;
+
+			// create or update shopping cart
+			this.bindData(shoppingCart);
+
 		},
 		methods: {
 			bindSubmit: function() {
-				let total = that.total;
+				let shoppingCart = getApp().globalData.shoppingCart;
+				////TODO: 验证购物车
+				if(shoppingCart.id === null){
+					uni.showToast({
+						title: "购物车无效",
+						image: "../../static/info-icon.png"
+					});
+					return;
+				}
+				
+				
 				uni.showModal({
-				    title: '提示',
-				    content: '总价:' + total + '元,是否提交订单？',
-				    success: function (res) {
-				        if (res.confirm) {
-				            uni.showToast({
-				                title: "提交成功",
-				            	image:"../../static/info-icon.png"
-				            });
-				        } else if (res.cancel) {
-				            console.log('用户点击取消');
-				        }
-				    }
+					title: '确认支付',
+					content: '总价:' + this.total + '元,是否提交订单？',
+					success: (res) => {
+						if (res.confirm) {
+							this.callWxPayment(shoppingCart);
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
 				});
+			},
+			bindData: function(shoppingCart) {
+				
+
+				if (shoppingCart.id && shoppingCart.id > 0 && shoppingCart.associations && shoppingCart.associations.cart_summary) {
+					// bind data
+					let total_demand = 0;
+					let discount = 0;
+					let total = 0;
+					for (let cartSummary of shoppingCart.associations.cart_summary) {
+						total_demand += Number(cartSummary.total_demand);
+						discount += Number(cartSummary.total_discounts);
+						total += Number(cartSummary.total_price);
+					}
+					
+					this.total_demand = total_demand;
+					this.discount = discount;
+					this.total = total;
+					
+					this.butBol = true;
+					
+				}else{
+					// update shopping cart id
+					getApp().globalData.shoppingCart.id = null;
+					this.butBol = false;
+					uni.showToast({
+						title: "订单错误请重试",
+						image: "../../static/info-icon.png"
+					});
+				}
+			},
+			callWxPayment: function(shoppingCart){
+				// 挂起微信支付服务
+				if(shoppingCart 
+					&& shoppingCart.associations 
+					&& shoppingCart.associations.cart_summary 
+					&& shoppingCart.associations.cart_summary.length > 0
+					&& shoppingCart.associations.cart_summary[0].wx_payment_info
+					&& shoppingCart.associations.cart_summary[0].wx_payment_info.prepay_id
+					&& shoppingCart.associations.cart_summary[0].wx_payment_info.nonce_str)
+					{
+						let timeStamp = new Date().getTime().toString();
+						let nonceStr = shoppingCart.associations.cart_summary[0].wx_payment_info.nonce_str;
+						let prepay_id = shoppingCart.associations.cart_summary[0].wx_payment_info.prepay_id;
+						let appid = getApp().globalData.appId;
+						let wx_pay_key = getApp().globalData.wx_pay_key;
+						
+						let paySign = cj.MD5('appId='+ appid +'&nonceStr='+ nonceStr +'&package=prepay_id='+ prepay_id +'&signType=MD5&timeStamp='+ timeStamp +'&key=' + wx_pay_key);
+						paySign = paySign.toString().toUpperCase();
+						if(Number(this.total) > 0){
+							wx.requestPayment(
+							{
+								'timeStamp': timeStamp, //时间戳从1970年1月1日00:00:00至今的秒数,即当前的时间
+								'nonceStr': nonceStr, //随机字符串，长度为32个字符以下。
+								'package': 'prepay_id=' + prepay_id, //统一下单接口返回的 prepay_id 参数值
+								'signType': 'MD5',
+								'paySign': paySign,
+								'success':(res) => {
+									//TODO: 支付成功 将购物车生成订单
+									this.paymentCallBack(shoppingCart);
+								},
+								'fail':(res) => {
+									uni.showToast({
+										title: "支付失败请重试！",
+										image: "../../static/info-icon.png",
+										duration:3000,
+										success: () => {
+											//TODO: 需要验证时间， 购物车生成的临时交易码有效期为24小时。 
+										}
+									});
+								}
+							});
+						}else{
+							//TODO: 支付成功 将购物车生成订单
+							this.paymentCallBack(shoppingCart);
+						}
+					}else {
+						uni.showToast({
+							title: "支付失败请重试！",
+							image: "../../static/info-icon.png",
+							duration:3000,
+							success: () => {
+								//TODO: 
+								// 支付网关生成失败， 可以显示原因。 
+								// shoppingCart.associations.cart_summary[0].wx_payment_info.return_msg
+								// 其他信息已微信文档为准 https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_1&index=1
+							}
+						});
+					}
+			},
+			paymentCallBack: function(shoppingCart){
+				let wxPaymentCode = 'wx';
+				
+				if(shoppingCart
+					&& shoppingCart.associations 
+					&& shoppingCart.associations.cart_summary 
+					&& shoppingCart.associations.cart_summary.length > 0
+					&& shoppingCart.associations.cart_summary[0].wx_out_trade_no){
+						wxPaymentCode +=  shoppingCart.associations.cart_summary[0].wx_out_trade_no;
+					}
+				// set data
+				let param = {
+					id_cart: shoppingCart.id,
+					id_customer: shoppingCart.customer.id,
+					total_paid: this.total,
+					total_paid_real: this.total,
+					wx_code: wxPaymentCode
+				};
+				// create order
+				API.createOrder((response) => {
+					uni.hideLoading();			
+										
+					// clear shopping cart
+					getApp().globalData.shoppingCart.id = null;
+					uni.showToast({
+						title: "提交成功",
+						image: "../../static/info-icon.png",
+						duration:3000,
+						success: () => {
+							// back to order page
+							wx.switchTab({
+								url: '/pages/order/order'
+							});
+						}
+					});
+				}, param);
 			}
 		}
 	}
@@ -126,7 +268,7 @@
 		flex-direction: column;
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
-		background-image: url('https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/orderbg.jpeg');
+		background-image: url('https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/orderbg.jpg');
 	}
 
 	.gbmask {

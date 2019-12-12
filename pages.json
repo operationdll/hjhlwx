@@ -1,10 +1,9 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/index/index"
-		},
-		{
 			"path": "pages/main/main"
+		}, {
+			"path": "pages/index/index"
 		}, {
 			"path": "pages/catalog/catalog"
 		}, {
@@ -25,8 +24,12 @@
 		}, {
 			"path": "pages/userList/userList",
 			"style": {}
+		}, {
+			"path": "pages/order/orderDetail",
+			"style": {}
 		}
-	],
+	    
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "汇骏护理",
