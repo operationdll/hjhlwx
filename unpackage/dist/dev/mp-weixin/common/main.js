@@ -92,8 +92,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
-var _util = _interopRequireDefault(__webpack_require__(/*! @/common/util.js */ 12));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
-
+var _util = _interopRequireDefault(__webpack_require__(/*! @/common/util.js */ 12));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+// import Stomp from '@/common/stomp.min.js';
+var _default =
 {
   globalData: {
     appId: 'wx29f4f1fbbae60fd8',
@@ -265,6 +266,11 @@ var _util = _interopRequireDefault(__webpack_require__(/*! @/common/util.js */ 1
   },
   onShow: function onShow() {
     // console.log('App Show')
+
+    // wx.connectSocket({
+    //   url: 'https://icare.easyiservice.com'
+    // })
+    // console.log(Stomp);
     //显示消息提示
     // wx.showTabBarRedDot({
     // 	index: 2

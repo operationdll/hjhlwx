@@ -230,8 +230,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
 var _api = _interopRequireDefault(__webpack_require__(/*! @/common/api.js */ 28));
 var _util = _interopRequireDefault(__webpack_require__(/*! @/common/util.js */ 12));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}
 
@@ -260,7 +258,7 @@ var that;var _default =
       infoUserIndex: 0,
       address: '',
       bntDis: false,
-
+      startTime: '11:00',
       selectedCare: {
         id: 11,
         hotel_name: '基础护理',
@@ -277,10 +275,7 @@ var that;var _default =
   },
   onLoad: function onLoad(options) {
     that = this;
-
     this.selectedCare = getApp().globalData.selectedService;
-
-
     // load products
     this.products = [];var _iteratorNormalCompletion = true;var _didIteratorError = false;var _iteratorError = undefined;try {
       for (var _iterator = this.selectedCare.associations.products[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {var product = _step.value;
@@ -291,13 +286,13 @@ var that;var _default =
           checked: false });
 
       }} catch (err) {_didIteratorError = true;_iteratorError = err;} finally {try {if (!_iteratorNormalCompletion && _iterator.return != null) {_iterator.return();}} finally {if (_didIteratorError) {throw _iteratorError;}}}
-
-
     var titles1 = '当天下单';
     var titles2 = '当天服务';
     if (options.orderType != 1) {
       titles1 = '预约下单';
       titles2 = '预订时间服务';
+      this.startTime = '9:00';
+      this.time = '9:00';
     } else {
       //设置16点之后就不能预订当天服务
       var now = new Date();
@@ -322,8 +317,6 @@ var that;var _default =
     this.regionIndex = this.selectedCare.selectedCustomer.regions;
 
     this.address = this.selectedCare.selectedCustomer.address;
-
-
   },
   methods: {
     // radioChange: function(product) {
@@ -366,17 +359,9 @@ var that;var _default =
         }
       }
 
-
       // set selected product
       var selectedProducts = [];
       selectedProducts.push(this.products[this.productIndex]);
-
-      // for (let product of this.products) {
-      // 	if (product.checked === true) {
-      // 		selectedProducts.push(product);
-      // 	}
-      // }
-
 
       //验证购物车
       if (selectedProducts.length <= 0) {
@@ -386,9 +371,7 @@ var that;var _default =
 
         return;
       }
-
       this.createShoppingCart(selectedProducts);
-
     },
 
     currencyConvertor: function currencyConvertor(value) {

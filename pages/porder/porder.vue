@@ -65,8 +65,6 @@
 					</view>
 				</view>
 			</view>
-						
-			
 			<block v-if="orderType!=1">
 				<view class="weui-cell mycells">
 					<view class="weui-cell__hd">
@@ -85,7 +83,7 @@
 						<view class="weui-label">预订时间:</view>
 					</view>
 					<view class="weui-cell__bd">
-						<picker mode="time" :value="time" start="11:00" end="19:00" @change="bindTimeChange">
+						<picker mode="time" :value="time" :start="startTime" end="19:00" @change="bindTimeChange">
 							<view class="uni-input">{{time}}</view>
 						</picker>
 					</view>
@@ -127,7 +125,7 @@
 				infoUserIndex: 0,
 				address: '',
 				bntDis: false,
-
+				startTime: '11:00',
 				selectedCare: {
 					id: 11,
 					hotel_name: '基础护理',
@@ -144,10 +142,7 @@
 		},
 		onLoad(options) {
 			that = this;
-
 			this.selectedCare = getApp().globalData.selectedService;
-
-
 			// load products
 			this.products = [];
 			for (let product of this.selectedCare.associations.products) {
@@ -158,13 +153,13 @@
 					checked: false
 				});
 			}
-
-
 			let titles1 = '当天下单';
 			let titles2 = '当天服务';
 			if (options.orderType != 1) {
 				titles1 = '预约下单';
 				titles2 = '预订时间服务';
+				this.startTime = '9:00';
+				this.time = '9:00';
 			} else {
 				//设置16点之后就不能预订当天服务
 				let now = new Date();
@@ -189,8 +184,6 @@
 			this.regionIndex = this.selectedCare.selectedCustomer.regions;
 
 			this.address = this.selectedCare.selectedCustomer.address;
-
-
 		},
 		methods: {
 			// radioChange: function(product) {
@@ -232,18 +225,10 @@
 						return;
 					}
 				}
-
-
+				
 				// set selected product
 				let selectedProducts = [];
 				selectedProducts.push(this.products[this.productIndex]);
-				
-				// for (let product of this.products) {
-				// 	if (product.checked === true) {
-				// 		selectedProducts.push(product);
-				// 	}
-				// }
-
 
 				//验证购物车
 				if (selectedProducts.length <= 0) {
@@ -253,9 +238,7 @@
 					});
 					return;
 				}
-
 				this.createShoppingCart(selectedProducts);
-				
 			},
 
 			currencyConvertor: function(value) {

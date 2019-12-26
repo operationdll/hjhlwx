@@ -24,7 +24,31 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -126,14 +150,50 @@ var _util = _interopRequireDefault(__webpack_require__(/*! @/common/util.js */ 1
 //
 //
 //
-var _default = { data: function data() {return { orderItem: { id: 0, orderStateName: '', reference: '', date_upd: '', gift_message: '', associations: { order_rows: [{ id: '', product_name: '' }] }, orderName: '', source: '', total_demand: 0, total_discounts: 0, total_paid: 0 }, services: [], orderStates: [], users: {}, userName: '', address: '' };}, onLoad: function onLoad(options) {this.users = getApp().globalData.users; //绑定主服务
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var that;var _default = { data: function data() {return { orderItem: { id: 0, orderStateName: '', reference: '', date_upd: '', gift_message: '', associations: { order_rows: [{ id: '', product_name: '' }] }, orderName: '', source: '', total_demand: 0, total_discounts: 0, total_paid: 0 }, services: [], orderStates: [], users: {}, userName: '', address: '', hUserName: '', hUserImage: '', hUserPhone: '', cHeight: '' };}, onLoad: function onLoad(options) {that = this;this.users = getApp().globalData.users; //绑定主服务
     this.services = getApp().globalData.services; // bind order states
-    this.orderStates = getApp().globalData.orderStates;}, onShow: function onShow() {this.bindData();}, methods: { bindData: function bindData() {this.orderItem = getApp().globalData.selectedOrderItem;this.address = this.orderItem.service_address;if (this.orderItem && this.orderItem.id > 0) {this.orderItem.total_demand = !isNaN(this.orderItem.total_demand) ? Number(this.orderItem.total_demand).toFixed(2) : '0.00';this.orderItem.total_discounts = !isNaN(this.orderItem.total_discounts) ? Number(this.orderItem.total_discounts).toFixed(2) : '0.00';this.orderItem.total_paid = !isNaN(this.orderItem.total_paid) ? Number(this.orderItem.total_paid).toFixed(2) : '0.00';}var _iteratorNormalCompletion = true;var _didIteratorError = false;var _iteratorError = undefined;try {for (var _iterator = this.users[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {var user = _step.value;if (Number(this.orderItem.id_address_delivery) === Number(user.id)) {
-            this.userName = user.lastname + user.firstname;
-            break;
-          }
-        }} catch (err) {_didIteratorError = true;_iteratorError = err;} finally {try {if (!_iteratorNormalCompletion && _iterator.return != null) {_iterator.return();}} finally {if (_didIteratorError) {throw _iteratorError;}}}
+    this.orderStates = getApp().globalData.orderStates;}, onReady: function onReady() {var _this = this; //动态获取元素的属性,设置显示高度
+    var selector = uni.createSelectorQuery().in(this).select('.content');selector.fields({ size: true }, function (data) {var cHeight = data.height;var mselector = uni.createSelectorQuery().in(_this).select('.gbmask');mselector.fields({ size: true }, function (mdata) {var mHeight = mdata.height;if (mHeight - cHeight > 0) {that.cHeight = "height:" + mHeight + "px";}}).exec();}).exec();}, onShow: function onShow() {this.bindData();}, methods: { bindData: function bindData() {this.orderItem = getApp().globalData.selectedOrderItem;this.address = this.orderItem.service_address;if (this.orderItem && this.orderItem.id > 0) {this.orderItem.total_demand = !isNaN(this.orderItem.total_demand) ? Number(this.orderItem.total_demand).toFixed(2) : '0.00';this.orderItem.total_discounts = !isNaN(this.orderItem.total_discounts) ? Number(this.orderItem.total_discounts).toFixed(2) : '0.00';this.orderItem.total_paid = !isNaN(this.orderItem.total_paid) ? Number(this.orderItem.total_paid).toFixed(2) : '0.00';}var _iteratorNormalCompletion = true;var _didIteratorError = false;var _iteratorError = undefined;try {for (var _iterator = this.users[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {var user = _step.value;if (Number(this.orderItem.id_address_delivery) === Number(user.id)) {this.userName = user.lastname + user.firstname;break;}
+        }
+        //护理人员信息
+      } catch (err) {_didIteratorError = true;_iteratorError = err;} finally {try {if (!_iteratorNormalCompletion && _iterator.return != null) {_iterator.return();}} finally {if (_didIteratorError) {throw _iteratorError;}}}var hUserName = this.orderItem.associations.service_provider_info[0].name;
+      if ("" != hUserName) {
+        var imageUrl = this.orderItem.associations.service_provider_info[0].image;
+        var hUserImage = 'https://icare.easyiservice.com' + imageUrl;
+        var hUserPhone = this.orderItem.associations.service_provider_info[0].phone;
+        if (hUserPhone.length > 4) {
+          hUserPhone = hUserPhone.substring(hUserPhone.length - 4, hUserPhone.length);
+        }
+        this.hUserName = hUserName;
+        this.hUserImage = hUserImage;
+        this.hUserPhone = hUserPhone;
+      }
     } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 

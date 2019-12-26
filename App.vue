@@ -1,5 +1,6 @@
 <script>
 	import Util from '@/common/util.js';
+	// import Stomp from '@/common/stomp.min.js';
 
 	export default {
 		globalData: {
@@ -172,6 +173,11 @@
 		},
 		onShow: function() {
 			// console.log('App Show')
+			
+			// wx.connectSocket({
+			//   url: 'https://icare.easyiservice.com'
+			// })
+			// console.log(Stomp);
 			//显示消息提示
 			// wx.showTabBarRedDot({
 			// 	index: 2
