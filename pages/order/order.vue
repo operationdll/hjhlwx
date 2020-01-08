@@ -1,6 +1,6 @@
 <template>
 	<view class="section">
-		<view class="section__title weui-panel__hd">我的预定</view>
+		<view class="section__title weui-panel__hd">订单管理</view>
 		<view class="weui-media-box weui-media-box_appmsg" v-for="(item, index) in orderList" v-bind:key="index" @click="showOrderDetail(item)">
 			<view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
 				<image class="weui-media-box__thumb" src="../../static/order.png" />

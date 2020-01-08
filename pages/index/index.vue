@@ -57,40 +57,6 @@
 			</uni-popup>
 		</view>
 	</view>
-	<!-- <view class="login-container">
-		<view>
-			<view class="userinfo">
-				<image class="userinfo-avatar" mode="cover" src="https://iservice.oss-cn-beijing.aliyuncs.com/ihuli/1/logo.png"></image>
-				<text class="userinfo-nickname">
-					汇骏护理
-				</text>
-			</view>
-			<view class="alert">
-				<view class="alert-title">请确认授权以下信息</view>
-				<view class="alert-desc">
-					<view class="alert-text userinfo-nickname" style="font-size: 28rpx;">
-						<li>获得你的公开信息（昵称、头像等）</li>
-					</view>
-				</view>
-			</view>
-			<view class="bntView">
-				<button type="warn" @click="backHome">
-					取消登录
-				</button>
-				<!- #ifdef MP-WEIXIN ->
-				<button type="primary" open-type="getUserInfo" @getuserinfo="getuserinfo" withCredentials="true">
-					确认登录
-				</button>
-				<!- #endif ->
-				<!- #ifdef APP-PLUS ->
-				<button @click="appWxLogin" type="primary">确认登录</button>
-				<!- #endif ->
-				<!- #ifdef  H5 ->
-				<view style="display: flex;flex: 1;justify-content: center;color: red;">微信登陆暂不支持网页授权</view>
-				<!- #endif ->
-			</view>
-		</view>
-	</view> -->
 </template>
 
 <script>
@@ -159,9 +125,7 @@
 					if (res.data.customers !== undefined) {
 						let customers = res.data.customers;
 						getApp().globalData.isNewUser = false;
-
 						// console.log(customers);
-
 						//本人信息
 						let customer = customers[0];
 						customer.address1 = customer.address;
@@ -176,9 +140,7 @@
 								getApp().globalData.users.push(user);
 							}
 						}
-
 						// console.log(getApp().globalData.users);
-
 						//跳转到主页面
 						uni.switchTab({
 							url: '/pages/main/main'
@@ -232,9 +194,11 @@
 								}
 							});
 						} else {
-							uni.showToast({
-								title: "微信服务商不存在",
-								image: "../../static/info-icon.png"
+							uni.showModal({
+							    title: '提示',
+							    content: '微信服务商不存在',
+								showCancel:false,
+								confirmColor:'#07c160'
 							});
 						}
 					},
@@ -260,6 +224,7 @@
 					livings: 0,
 					flats: 0,
 					diseases: 0,
+					diseasesDetail:'',
 					scares: 0,
 					ifs: [false, false, false, false, false, false, false, false],
 					otherTxt: '',
@@ -297,6 +262,8 @@
 					}
 				}
 				user.diseases = health_status;
+				//疾病其他
+				user.diseasesDetail = customer.health_status_detail;
 				//特别护理
 				let scares = getApp().globalData.scares;
 				let special_care = 0;

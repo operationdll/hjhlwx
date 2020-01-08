@@ -7,4 +7,4 @@
         })
     },
     [['components/uni-list/uni-list-create-component']]
-]);                
+]);

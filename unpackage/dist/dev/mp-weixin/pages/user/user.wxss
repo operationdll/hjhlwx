@@ -37,12 +37,10 @@
 	padding: 16px;
 	-webkit-box-align: center;
 	-webkit-align-items: center;
-	-ms-flex-align: center;
-	    align-items: center;
+	align-items: center;
 	-webkit-box-orient: horizontal;
 	-webkit-box-direction: normal;
 	-webkit-flex-direction: row;
-	    -ms-flex-direction: row;
 	        flex-direction: row;
 }
 view {
@@ -68,8 +66,7 @@ view {
 .weui-cell__bd {
 	-webkit-box-flex: 1;
 	-webkit-flex: 1;
-	-ms-flex: 1;
-	    flex: 1;
+	flex: 1;
 }
 .weui-input {
 	margin-top: -8rpx;
@@ -83,8 +80,7 @@ input {
 	cursor: auto;
 	display: block;
 	height: 40rpx;
-	-o-text-overflow: clip;
-	   text-overflow: clip;
+	text-overflow: clip;
 	overflow: hidden;
 	white-space: nowrap;
 	font-family: UICTFontTextStyleBody;

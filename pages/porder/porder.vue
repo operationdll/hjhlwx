@@ -51,8 +51,6 @@
 			</view>
 			<view class="weui-cells__title" style="border-bottom: 1rpx solid rgba(0,0,0,.1);">{{selectedCare.hotel_name}}</view>
 			<view class="weui-cells__title" style="border-bottom: 1rpx solid rgba(0,0,0,.1);">{{selectedCare.productItems}}</view>
-			
-			
 			<view class="weui-cells weui-cells_after-title">
 				<view class="weui-cell">
 					<view class="weui-cell__hd">
@@ -118,14 +116,14 @@
 				ycode: '',
 				title: '',
 				service: '4小时',
-				time: '11:00',
+				time: '',
 				titles1: '',
 				titles2: '',
 				infoUsers: [],
 				infoUserIndex: 0,
 				address: '',
 				bntDis: false,
-				startTime: '11:00',
+				startTime: '',
 				selectedCare: {
 					id: 11,
 					hotel_name: '基础护理',
@@ -161,12 +159,28 @@
 				this.startTime = '9:00';
 				this.time = '9:00';
 			} else {
-				//设置16点之后就不能预订当天服务
-				let now = new Date();
-				if (now.getHours() > 15) {
-					this.bntDis = true;
-				}
 				this.dateStart = Util.getToday();
+				//当天下单时间提前2小时
+				const date = new Date();
+				const hour = Number(date.getHours())+2;
+				let minute = Number(date.getMinutes());
+				if(minute<10){
+					minute = '0' + minute;
+				}
+				let time = '';
+				if(hour<11){
+					time = '11:00';
+				}else{
+					//设置16点之后就不能预订当天服务
+					if(hour>16){
+						this.bntDis = true;
+						time = (hour-2) + ':' + minute;
+					}else{
+						time = hour + ':' + minute;
+					}
+				}
+				this.startTime = time;
+				this.time = time;
 			}
 			this.orderType = options.orderType;
 			this.title = options.title;
@@ -186,9 +200,6 @@
 			this.address = this.selectedCare.selectedCustomer.address;
 		},
 		methods: {
-			// radioChange: function(product) {
-			// 	product.checked = !product.checked;
-			// },
 			bindProductChange: function(e){
 				this.productIndex = e.target.value;	
 			},
@@ -209,7 +220,7 @@
 				this.dateStart = e.target.value;
 			},
 			submitForm: function() {
-				//当天下单需要判断时间
+				//当天下单需要判断时间提前2小时
 				if (this.orderType == 1) {
 					let date1 = new Date();
 					let date2 = new Date(Util.getToday() + ' ' + this.time);
@@ -217,15 +228,16 @@
 						s2 = date2.getTime();
 					let total = s2 - s1;
 					let timeSpanStr = Math.round((total / (1000 * 60)));
-					if (timeSpanStr < 180) {
-						uni.showToast({
-							title: "服务需提前3小时预订",
-							image: "../../static/info-icon.png"
+					if (timeSpanStr < 120) {
+						uni.showModal({
+						    title: '提示',
+						    content: '需提前2小时预订',
+							showCancel:false,
+							confirmColor:'#07c160'
 						});
 						return;
 					}
 				}
-				
 				// set selected product
 				let selectedProducts = [];
 				selectedProducts.push(this.products[this.productIndex]);
@@ -240,15 +252,12 @@
 				}
 				this.createShoppingCart(selectedProducts);
 			},
-
 			currencyConvertor: function(value) {
 				if (!isNaN(value)) {
 					return Number.parseFloat(value).toFixed(2) + '元';
 				}
 			},
-
 			createShoppingCart: function(selectedProducts) {
-
 				// create || update shopping cart
 				let shoppingCart = getApp().globalData.shoppingCart;
 
@@ -303,7 +312,6 @@
 					id_address_delivery: shoppingCart.otherMember !== null ? shoppingCart.otherMember.id : '',
 					service_address: address
 				};
-				// console.log(param);
 				// create or update shopping cart
 				if (shoppingCart.id === null) {
 					// create
@@ -319,10 +327,8 @@
 					}, param);
 				}
 			},
-
 			bindData: function(data, shoppingCart) {
 				uni.hideLoading();
-
 				if (data && data.data && data.data.cart && data.data.cart.associations && data.data.cart.associations.cart_summary) {
 					// bind data
 					let total_demand = 0;
@@ -333,7 +339,6 @@
 						discount += Number(cartSummary.total_discounts);
 						total += Number(cartSummary.total_price);
 					}
-
 					if (data.data.cart.id && data.data.cart.id > 0 && total >= 0) {
 						if(this.ycode && this.ycode !== '' && discount <= 0){
 							// promo code invalide
@@ -341,7 +346,7 @@
 							getApp().globalData.shoppingCart = shoppingCart;
 							
 							uni.showToast({
-								title: "优惠吗无效",
+								title: "优惠码无效",
 								image: "../../static/info-icon.png"
 							});
 							return;
@@ -371,8 +376,6 @@
 					});
 					return;
 				}
-
-
 			}
 		}
 	}

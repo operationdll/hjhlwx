@@ -1,7 +1,7 @@
 <template>
 	<view class="page">
 		<view class="page__hd">
-			<view class="page__title">个人中心</view>
+			<view class="page__title">成员个人中心</view>
 		</view>
 		<view class="page__bd">
 			<view class="weui-cells weui-cells_after-title">
@@ -142,6 +142,16 @@
 					</view>
 				</view>
 			</view>
+			<view class="weui-cells weui-cells_after-title" v-if="!showDisDtl">
+				<view class="weui-cell" style="display: -webkit-box;display: -webkit-flex;display: flex;">
+					<view class="weui-cell__hd">
+						<view class="weui-label">其他:</view>
+					</view>
+					<view class="weui-cell__bd">
+						<input class="weui-input" placeholder="请输入" v-model="diseasesDetail" />
+					</view>
+				</view>
+			</view>
 			<view class="weui-cells__title"></view>
 			<view class="weui-cells weui-cells_after-title">
 				<view class="weui-cell" style="display: -webkit-box;display: -webkit-flex;display: flex;">
@@ -232,6 +242,8 @@
 				flatIndex: 0,
 				diseases: getApp().globalData.diseases,
 				diseaseIndex: 0,
+				diseasesDetail:'',
+				showDisDtl: true,
 				scares: getApp().globalData.scares,
 				scareIndex: 0,
 				ifs: [],
@@ -295,6 +307,11 @@
 				this.livingIndex = user.livings;
 				this.flatIndex = user.flats;
 				this.diseaseIndex = user.diseases;
+				//显示疾病其他
+				this.diseasesDetail = user.diseasesDetail;
+				if(this.diseaseIndex==5){
+					this.showDisDtl = false;
+				}
 				this.scareIndex = user.scares;
 				this.otherTxt = user.otherTxt;
 				this.relationshipIndex = user.relationship;
@@ -312,6 +329,12 @@
 			},
 			bindDiseaseChange: function(e) {
 				this.diseaseIndex = e.target.value;
+				this.showDisDtl = true;
+				if(this.diseaseIndex==5){
+					this.showDisDtl = false;
+				}else{
+					this.diseasesDetail = '';
+				}
 			},
 			bindSexChange: function(e) {
 				this.sexIndex = e.target.value;
@@ -375,6 +398,8 @@
 				let home_type = this.flatIndex;
 				//疾病
 				let health_status = this.diseaseIndex;
+				//疾病其他
+				let health_status_detail = this.diseasesDetail;
 				//特别护理
 				let special_care = this.scareIndex;
 				//如有
@@ -405,12 +430,12 @@
 					livings: living_status,
 					flats: home_type,
 					diseases: health_status,
+					diseasesDetail:health_status_detail,
 					scares: special_care,
 					ifs: ifs,
 					otherTxt: otherTxt,
 					relationship: relationship
 				};
-
 				// 获取登陆凭证
 				uni.login({
 					provider: 'weixin',
@@ -429,6 +454,7 @@
 						param.living_status = self.livings[living_status];
 						param.home_type = self.flats[home_type];
 						param.health_status = self.diseases[health_status];
+						param.health_status_detail = health_status_detail;
 						param.special_care = self.scares[special_care];
 						if (otherTxt != '') {
 							special_care_detail.push(otherTxt);

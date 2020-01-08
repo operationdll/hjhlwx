@@ -2,7 +2,7 @@
 	<view>
 		<view class="example-title">人员列表</view>
 		<uni-list>
-			<view @click="updateUser($event,index)" v-for="(item, index) in userList" v-bind:key="index"  style="border-bottom: 1px #f5f5f5 solid;">
+			<view @click="updateUser($event,index)" v-for="(item, index) in userList" v-bind:key="index"  style="border-bottom: 1px #f5f5f5 solid;" v-if="index!=1">
 				<view class="cont" v-if="index==0">本人信息</view>
 				<view class="cont" v-else>{{item.lastname}}{{item.firstname}}</view>
 			</view>
@@ -38,15 +38,19 @@
 			//判断是否注册过用户信息
 			let id = getApp().globalData.users[0].id;
 			if(id == 0){
-				uni.showToast({
-					title: "请先注册用户信息",
-					image: "../../static/info-icon.png"
+				uni.showModal({
+				    title: '提示',
+				    content: '请先注册用户信息',
+					showCancel:false,
+					confirmColor:'#07c160',
+					success: function (res) {
+						if (res.confirm) {
+							uni.navigateTo({
+								url: '/pages/user/user?userIndex=0'
+							});
+						}
+					}
 				});
-				setTimeout(function(){
-					uni.navigateTo({
-						url: '/pages/user/user?userIndex=0'
-					});
-				},1500);
 			}
 		},
 		onShow: function() {

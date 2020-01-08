@@ -190,13 +190,11 @@
 									this.paymentCallBack(shoppingCart);
 								},
 								'fail':(res) => {
-									uni.showToast({
-										title: "支付失败请重试！",
-										image: "../../static/info-icon.png",
-										duration:3000,
-										success: () => {
-											//TODO: 需要验证时间， 购物车生成的临时交易码有效期为24小时。 
-										}
+									uni.showModal({
+									    title: '提示',
+									    content: '支付失败请重试！',
+										showCancel:false,
+										confirmColor:'#07c160'
 									});
 								}
 							});
@@ -205,16 +203,11 @@
 							this.paymentCallBack(shoppingCart);
 						}
 					}else {
-						uni.showToast({
-							title: "支付失败请重试！",
-							image: "../../static/info-icon.png",
-							duration:3000,
-							success: () => {
-								//TODO: 
-								// 支付网关生成失败， 可以显示原因。 
-								// shoppingCart.associations.cart_summary[0].wx_payment_info.return_msg
-								// 其他信息已微信文档为准 https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_1&index=1
-							}
+						uni.showModal({
+						    title: '提示',
+						    content: '支付失败请重试！',
+							showCancel:false,
+							confirmColor:'#07c160'
 						});
 					}
 			},

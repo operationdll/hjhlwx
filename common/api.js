@@ -91,6 +91,8 @@ const createCustomer = (callback, param) => {
 		`</home_type>
                     <health_status required="true" maxSize="200">` + param.health_status +
 		`</health_status>
+					<health_status_detail required="true" maxSize="200">` + param.health_status_detail +
+		`</health_status_detail>
                     <special_care required="true" maxSize="200">` + param.special_care +
 		`</special_care>
                     <special_care_detail maxSize="3000">` + param.special_care_detail +
@@ -141,7 +143,8 @@ const addCustomer = (callback, param) => {
 		`</home_type>
                     <health_status maxSize="200">` + param.health_status +
 		`</health_status>
-                    <health_status_detail maxSize="3000">health_status_detail</health_status_detail>
+                    <health_status_detail maxSize="3000">` + param.health_status_detail +
+		`</health_status_detail>
                     <special_care maxSize="200">` +
 		param.special_care + `</special_care>
                     <special_care_detail maxSize="3000">` + param.special_care_detail +
@@ -194,7 +197,7 @@ const updateUser = (callback, param) => {
 		`</home_type>
         <health_status required="true" maxSize="200">` + param.health_status +
 		`</health_status>
-        <health_status_detail maxSize="3000"> ["长期病患", "长期病患1", "长期病患2", "长期病患3"] </health_status_detail>       
+        <health_status_detail maxSize="3000">` + param.health_status_detail + `</health_status_detail>       
 		<special_care required="true" maxSize="200">` +
 		param.special_care + `</special_care>
         <special_care_detail maxSize="3000">` + param.special_care_detail +
@@ -245,7 +248,8 @@ const updateMember = (callback, param) => {
 		`</home_type>
         <health_status maxSize="200">` + param.health_status +
 		`</health_status>
-        <health_status_detail maxSize="3000">health_status_detail111</health_status_detail>
+        <health_status_detail maxSize="3000">` + param.health_status_detail +
+		`</health_status_detail>
         <special_care maxSize="200">` +
 		param.special_care + `</special_care>
         <special_care_detail maxSize="3000">` + param.special_care_detail +
