@@ -288,11 +288,11 @@ const createShoppingCart = (callback, param) => {
 		param.gift_message + `</gift_message>
 				<!--服务时间 yyyy-mm-dd -->
 				<date_from format="isDate" required="true">` +
-		param.date_from + `</date_from>
+		param.date_from + `:00</date_from>
 				<delivery_option format="string" required="true">` +
 						param.date_from + `</delivery_option>
 				<date_to format="isDate" required="true">` + param.date_to +
-		`</date_to>
+		`:00</date_to>
 				<reference format="int" required="true">1</reference>
 				<promocode format="string" >` + param.promocode +
 		`</promocode>
@@ -360,9 +360,9 @@ const updateShoppingCart = (callback, param) => {
 		param.gift_message + `</gift_message>
 				<!--服务时间 yyyy-mm-dd -->
 				<date_from format="isDate" required="true">` +
-		param.date_from + `</date_from>
+		param.date_from + `:00</date_from>
 				<date_to format="isDate" required="true">` + param.date_to +
-		`</date_to>
+		`:00</date_to>
 				<reference format="int" required="true">1</reference>
 				<promocode format="string" >` + param.promocode +
 		`</promocode>

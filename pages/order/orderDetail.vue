@@ -26,11 +26,21 @@
 				<text>{{orderItem.total_demand}}</text>
 			</view>
 			<view class="intro">
+				<text>服务:</text>
+				<text>{{orderItem.associations.order_rows[0].product_name}}</text>
+			</view>
+			<block v-if="feature_price_total_no_tax>0">
+				<view class="intro">
+					<text>{{feature_price_name}}:</text>
+					<text>{{feature_price_total_no_tax}}</text>
+				</view>
+			</block>
+			<view class="intro">
 				<text>优惠金额:</text>
 				<text>{{orderItem.total_discounts}}元</text>
 			</view>
 			<view class="intro">
-				<text>服务:</text>
+				<text>服务项目:</text>
 				<text>{{orderItem.gift_message}}</text>
 			</view>
 			<view class="intro">
@@ -107,9 +117,14 @@
 				hUserImage:'',
 				hUserPhone:'',
 				cHeight:'',
+				feature_price_name:'',
+				feature_price_total_no_tax:0,
 			}
 		},
 		onLoad(options) {
+			//开启分享功能
+			wx.showShareMenu();
+			
 			that = this;
 			this.users = getApp().globalData.users;
 			//绑定主服务
@@ -141,11 +156,16 @@
 		methods: {
 			bindData: function() {
 				this.orderItem = getApp().globalData.selectedOrderItem;
+				// console.log(this.orderItem)
 				this.address = this.orderItem.service_address;
 				if(this.orderItem && this.orderItem.id > 0){
 					this.orderItem.total_demand = !isNaN(this.orderItem.total_demand) ? Number(this.orderItem.total_demand).toFixed(2) : '0.00';
 					this.orderItem.total_discounts = !isNaN(this.orderItem.total_discounts) ? Number(this.orderItem.total_discounts).toFixed(2) : '0.00';
 					this.orderItem.total_paid = !isNaN(this.orderItem.total_paid) ? Number(this.orderItem.total_paid).toFixed(2) : '0.00';
+					//附加费
+					let feaFee = this.orderItem.associations.feature_prices[0];
+					this.feature_price_name = feaFee.feature_price_name;
+					this.feature_price_total_no_tax = feaFee.feature_price_total_no_tax;
 				}
 				for(let user of this.users){
 					if(Number(this.orderItem.id_address_delivery) === Number(user.id)){

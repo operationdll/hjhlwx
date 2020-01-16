@@ -28,6 +28,9 @@
 			}
 		},
 		onLoad() {
+			//开启分享功能
+			wx.showShareMenu();
+			
 			//判断是否登录
 			if(!Util.isLogin()){
 				uni.redirectTo({

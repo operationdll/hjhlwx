@@ -339,8 +339,10 @@
 			}
 		},
 		onLoad(options) {
+			//开启分享功能
+			wx.showShareMenu();
+			
 			that = this;
-
 			// load service 临时方法
 			
 			let services = getApp().globalData.services;

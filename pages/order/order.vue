@@ -52,7 +52,8 @@
 			}
 		},
 		onLoad(options) {
-			
+			//开启分享功能
+			wx.showShareMenu();
 		},
 		onShow() {
 			//判断是否登录

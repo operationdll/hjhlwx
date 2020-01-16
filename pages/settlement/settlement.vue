@@ -19,6 +19,10 @@
 					<text>区域附加费:</text>
 					<text>{{total_demand}}</text>
 				</view>
+				<view class="intro" v-if="extraFee>0">
+					<text>节日附加费:</text>
+					<text>{{extraFee}}</text>
+				</view>
 				<view class="intro">
 					<text>优惠码:</text>
 					<text>{{ycode}}</text>
@@ -74,25 +78,29 @@
 				total_demand: 0,
 				selectedCare: {
 					hotel_name: ''
-				}
+				},
+				extraFee:0,
 			}
 		},
 		onLoad: function(options) {
+			//开启分享功能
+			wx.showShareMenu();
+			
 			that = this;
 			if (undefined != options.butBol) {
-				that.butBol = false;
+				this.butBol = false;
 			}
-			that.region = options.region;
-			that.ycode = options.ycode;
-			that.title = options.title;
-			that.address = options.address;
+			this.region = options.region;
+			this.ycode = options.ycode;
+			this.title = options.title;
+			this.address = options.address;
 
 			this.selectedCare = getApp().globalData.selectedService;
 			// get saved shopping cart
 			let shoppingCart = getApp().globalData.shoppingCart;
 
 			// show data
-			that.start = shoppingCart.date_from;
+			this.start = shoppingCart.date_from;
 			this.service = '';
 			for(let product of shoppingCart.products){
 				this.service += ' ' + product.name;
@@ -102,6 +110,8 @@
 
 			// create or update shopping cart
 			this.bindData(shoppingCart);
+			//节日附加费
+			this.extraFee = options.extraFee;
 
 		},
 		methods: {
@@ -165,9 +175,7 @@
 					&& shoppingCart.associations 
 					&& shoppingCart.associations.cart_summary 
 					&& shoppingCart.associations.cart_summary.length > 0
-					&& shoppingCart.associations.cart_summary[0].wx_payment_info
-					&& shoppingCart.associations.cart_summary[0].wx_payment_info.prepay_id
-					&& shoppingCart.associations.cart_summary[0].wx_payment_info.nonce_str)
+					&& shoppingCart.associations.cart_summary[0].wx_payment_info)
 					{
 						let timeStamp = new Date().getTime().toString();
 						let nonceStr = shoppingCart.associations.cart_summary[0].wx_payment_info.nonce_str;
@@ -177,7 +185,8 @@
 						
 						let paySign = cj.MD5('appId='+ appid +'&nonceStr='+ nonceStr +'&package=prepay_id='+ prepay_id +'&signType=MD5&timeStamp='+ timeStamp +'&key=' + wx_pay_key);
 						paySign = paySign.toString().toUpperCase();
-						if(Number(this.total) > 0){
+						if(Number(this.total) > 0&& shoppingCart.associations.cart_summary[0].wx_payment_info.prepay_id
+					&& shoppingCart.associations.cart_summary[0].wx_payment_info.nonce_str){
 							wx.requestPayment(
 							{
 								'timeStamp': timeStamp, //时间戳从1970年1月1日00:00:00至今的秒数,即当前的时间

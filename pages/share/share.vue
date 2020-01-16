@@ -32,6 +32,10 @@
 
 			}
 		},
+		onLoad() {
+			//开启分享功能
+			wx.showShareMenu();
+		},
 		methods: {
 			bindCallUser(e) {
 				uni.makePhoneCall({

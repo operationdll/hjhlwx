@@ -266,6 +266,9 @@
 			}
 		},
 		onLoad(options) {
+			//开启分享功能
+			wx.showShareMenu();
+			
 			self = this;
 			this.ifs = getApp().globalData.ifs.slice();
 			let user = getApp().globalData.users[options.userIndex];

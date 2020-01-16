@@ -74,6 +74,9 @@
 			}
 		},
 		onLoad() {
+			//开启分享功能
+			wx.showShareMenu();
+			
 			self = this;
 			//获取区域信息
 			API.getArea((res) => {

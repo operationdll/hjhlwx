@@ -14,7 +14,8 @@
 			}
 		},
 		onLoad(options) {
-			
+			//开启分享功能
+			wx.showShareMenu();
 		},
 		methods: {
 			

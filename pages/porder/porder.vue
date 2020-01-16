@@ -133,12 +133,18 @@
 						products: []
 					}
 				},
-				products: [{name: '', price: 0}],
+				products: [{
+					name: '',
+					price: 0
+				}],
 				productIndex: 0
 
 			}
 		},
 		onLoad(options) {
+			//开启分享功能
+			wx.showShareMenu();
+
 			that = this;
 			this.selectedCare = getApp().globalData.selectedService;
 			// load products
@@ -162,20 +168,20 @@
 				this.dateStart = Util.getToday();
 				//当天下单时间提前2小时
 				const date = new Date();
-				const hour = Number(date.getHours())+2;
+				const hour = Number(date.getHours()) + 2;
 				let minute = Number(date.getMinutes());
-				if(minute<10){
+				if (minute < 10) {
 					minute = '0' + minute;
 				}
 				let time = '';
-				if(hour<11){
+				if (hour < 11) {
 					time = '11:00';
-				}else{
+				} else {
 					//设置16点之后就不能预订当天服务
-					if(hour>16){
+					if (hour > 16) {
 						this.bntDis = true;
-						time = (hour-2) + ':' + minute;
-					}else{
+						time = (hour - 2) + ':' + minute;
+					} else {
 						time = hour + ':' + minute;
 					}
 				}
@@ -188,10 +194,12 @@
 			this.titles2 = titles2;
 			//添加信息人
 			let users = getApp().globalData.users;
-			for (let user of users) {
-				this.infoUsers.push(user.lastname + user.firstname);
+			for (let i = 0; i < users.length; i++) {
+				if (i != 1) {
+					let user = users[i];
+					this.infoUsers.push(user.lastname + user.firstname);
+				}
 			}
-
 			//set default region
 			this.regions = getApp().globalData.regions;
 			this.selectedCare.selectedCustomer = getApp().globalData.users[0];
@@ -200,15 +208,19 @@
 			this.address = this.selectedCare.selectedCustomer.address;
 		},
 		methods: {
-			bindProductChange: function(e){
-				this.productIndex = e.target.value;	
+			bindProductChange: function(e) {
+				this.productIndex = e.target.value;
 			},
 			bindInfoUserChange: function(e) {
 				this.infoUserIndex = e.target.value;
+				let infoUserIndex = this.infoUserIndex;
+				if (infoUserIndex != 0) {
+					infoUserIndex = Number(infoUserIndex) + 1;
+				}
 				// 修改服务区域
-				this.regionIndex = getApp().globalData.users[this.infoUserIndex].regions;
+				this.regionIndex = getApp().globalData.users[infoUserIndex].regions;
 				//修改地址
-				this.address = getApp().globalData.users[this.infoUserIndex].address;
+				this.address = getApp().globalData.users[infoUserIndex].address;
 			},
 			bindRegionChange: function(e) {
 				this.regionIndex = e.target.value;
@@ -230,10 +242,10 @@
 					let timeSpanStr = Math.round((total / (1000 * 60)));
 					if (timeSpanStr < 120) {
 						uni.showModal({
-						    title: '提示',
-						    content: '需提前2小时预订',
-							showCancel:false,
-							confirmColor:'#07c160'
+							title: '提示',
+							content: '需提前2小时预订',
+							showCancel: false,
+							confirmColor: '#07c160'
 						});
 						return;
 					}
@@ -247,6 +259,16 @@
 					uni.showToast({
 						title: "请选择服务种类",
 						image: "../../static/info-icon.png"
+					});
+					return;
+				}
+				//服务地址
+				if(this.address == ''){
+					uni.showModal({
+						title: '提示',
+						content: '服务地址不能为空',
+						showCancel: false,
+						confirmColor: '#07c160'
 					});
 					return;
 				}
@@ -279,8 +301,8 @@
 				let user = getApp().globalData.users[0];
 				shoppingCart.customer = user;
 				if (this.infoUserIndex > 0) {
-					shoppingCart.otherMember = getApp().globalData.users[this.infoUserIndex];
-				}else{
+					shoppingCart.otherMember = getApp().globalData.users[Number(this.infoUserIndex)+1];
+				} else {
 					shoppingCart.otherMember = user;
 				}
 
@@ -291,6 +313,9 @@
 				// 4. set service area
 				shoppingCart.global_demand = this.regions[this.regionIndex];
 				// 5. date from - date to
+				if (this.time.split(':')[0].length == 1) {
+					this.time = '0' + this.time;
+				}
 				shoppingCart.date_from = this.dateStart + ' ' + this.time;
 				shoppingCart.date_to = this.dateStart + ' ' + this.time;
 				// 6. set product items
@@ -316,13 +341,13 @@
 				if (shoppingCart.id === null) {
 					// create
 					API.createShoppingCart((res) => {
-						console.log(res);
+						// console.log(res);
 						this.bindData(res, shoppingCart);
 					}, param);
 				} else {
 					// update
 					API.updateShoppingCart((res) => {
-						console.log(res);
+						// console.log(res);
 						this.bindData(res, shoppingCart);
 					}, param);
 				}
@@ -340,26 +365,28 @@
 						total += Number(cartSummary.total_price);
 					}
 					if (data.data.cart.id && data.data.cart.id > 0 && total >= 0) {
-						if(this.ycode && this.ycode !== '' && discount <= 0){
+						if (this.ycode && this.ycode !== '' && discount <= 0) {
 							// promo code invalide
 							shoppingCart.id = null;
 							getApp().globalData.shoppingCart = shoppingCart;
-							
+
 							uni.showToast({
 								title: "优惠码无效",
 								image: "../../static/info-icon.png"
 							});
 							return;
-						}else{
+						} else {
 							// update shopping cart id
 							shoppingCart.id = data.data.cart.id;
 							shoppingCart.associations = data.data.cart.associations;
 							getApp().globalData.shoppingCart = shoppingCart;
-							
+							//节日附加费
+							let extraFee = shoppingCart.associations.feature_prices[0].feature_price_total_no_tax;
+
 							let userName = 'aaaa';
 							let url = '/pages/settlement/settlement?region=' + this.regions[this.regionIndex].name + '&ycode=' + this.ycode +
 								'&title=' + this.title + '&total=' + this.total + '&service=' + this.service + '&start=' + this.dateStart +
-								'&time=' + this.time + '&userName=' + userName + '&address=' + this.address;
+								'&time=' + this.time + '&userName=' + userName + '&address=' + this.address + '&extraFee=' + extraFee;
 							uni.navigateTo({
 								url: url
 							});
@@ -369,7 +396,7 @@
 					// update shopping cart id
 					shoppingCart.id = null;
 					getApp().globalData.shoppingCart = shoppingCart;
-					
+
 					uni.showToast({
 						title: "订单错误请重试",
 						image: "../../static/info-icon.png"
